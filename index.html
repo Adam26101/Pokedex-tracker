@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokédex Tracker</title>
+<style>
+body { font-family: -apple-system, Arial; margin: 0; background: #f5f5f5; }
+header { background: #ef5350; color: white; padding: 10px; text-align: center; }
+.controls { padding: 10px; background: white; position: sticky; top: 0; z-index: 10; }
+.stats { padding: 8px; background: #fff3cd; font-size: 14px; }
+.bar { height: 8px; background: #ddd; border-radius: 10px; margin: 4px 0 8px; overflow: hidden; }
+.bar div { height: 100%; background: #4caf50; }
+input, select, button { padding: 6px; margin: 4px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; padding: 8px; }
+@media (max-width: 768px) { .grid { grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 8px; } }
+.card { background: white; border-radius: 8px; padding: 8px; text-align: center; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+.card:active { transform: scale(0.95); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.card.got { background: #c8e6c9; }
+.card img { width: 64px; height: 64px; pointer-events: none; object-fit: contain; }
+.number { font-size: 11px; color: #666; pointer-events: none; margin: 0; }
+.card div { pointer-events: none; font-size: 12px; line-height: 1.2; margin: 0; }
+</style>
+</head>
+<body>
+<header><h2>Pokédex Tracker</h2></header>
+<div class="controls">
+<input type="text" id="search" placeholder="Search name or number">
+<select id="status"><option value="all">All</option><option value="got">Got</option><option value="need">Need</option></select>
+<select id="gen"><option value="all">All Gens</option><option value="1">Gen 1</option><option value="2">Gen 2</option><option value="3">Gen 3</option><option value="4">Gen 4</option><option value="5">Gen 5</option><option value="6">Gen 6</option><option value="7">Gen 7</option><option value="8">Gen 8</option><option value="9">Gen 9</option></select>
+<button onclick="exportData()">Export</button><button onclick="importData()">Import</button>
+</div>
+<div class="stats" id="stats"></div>
+<div class="grid" id="grid"></div>
+<script>
+const pokemon = [];
+const namesCache = {};
+let allNamesLoaded = false;
+function getGen(id){ return id <= 151 ? 1 : id <= 251 ? 2 : id <= 386 ? 3 : id <= 493 ? 4 : id <= 649 ? 5 : id <= 721 ? 6 : id <= 809 ? 7 : id <= 905 ? 8 : 9; }
+for(let i=1;i<=1025;i++){ pokemon.push({id:i, name:"", gen:getGen(i)}); }
+let owned = JSON.parse(localStorage.getItem("owned") || "{}");
+for(let i=1;i<=151;i++){ owned[i] = true; }
+async function loadAllNames(){
+  if(allNamesLoaded) return;
+  let res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=2000");
+  let data = await res.json();
+  data.results.forEach((p, index) => { let id = index + 1; namesCache[id] = p.name.charAt(0).toUpperCase() + p.name.slice(1); });
+  allNamesLoaded = true;
+}
+function getGenStats(){
+  let gens = {};
+  for(let p of pokemon){ if(!gens[p.gen]) gens[p.gen]={total:0, owned:0}; gens[p.gen].total++; if(owned[p.id]) gens[p.gen].owned++; }
+  return Object.entries(gens).map(([gen,data]) => ({gen, pct: data.owned/data.total})).sort((a,b)=>b.pct-a.pct);
+}
+async function render(){
+  await loadAllNames();
+  const grid=document.getElementById("grid");
+  grid.innerHTML="";
+  const search=document.getElementById("search").value.toLowerCase();
+  const status=document.getElementById("status").value;
+  const genFilter=document.getElementById("gen").value;
+  let total=0, ownedCount=0, filteredTotal=0, filteredOwned=0;
+  for(let p of pokemon){
+    let isGot=owned[p.id];
+    total++;
+    if(isGot) ownedCount++;
+    if(genFilter!=='all' && p.gen!=genFilter) continue;
+    let name = namesCache[p.id] || ("Pokemon " + p.id);
+    if(search && !name.toLowerCase().includes(search) && p.id.toString()!==search) continue;
+    if(status==="got" && !isGot) continue;
+    if(status==="need" && isGot) continue;
+    filteredTotal++;
+    if(isGot) filteredOwned++;
+    let fav = owned["fav_"+p.id];
+    let div=document.createElement("div");
+    div.className="card "+(isGot?"got":"");
+    div.innerHTML=`<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png"><div class="number">#${p.id}</div><div>${name}</div><div>${fav ? "⭐" : ""}</div>`;
+    let pressTimer;
+    div.onmousedown = () => { pressTimer = setTimeout(() => { owned["fav_"+p.id] = !owned["fav_"+p.id]; localStorage.setItem("owned", JSON.stringify(owned)); render(); }, 500); };
+    div.onmouseup = () => clearTimeout(pressTimer);
+    div.onclick=()=>{ owned[p.id]=!owned[p.id]; localStorage.setItem("owned",JSON.stringify(owned)); render(); };
+    grid.appendChild(div);
+  }
+  let overallPct = ((ownedCount/total)*100).toFixed(1);
+  let filteredPct = filteredTotal ? ((filteredOwned/filteredTotal)*100).toFixed(1) : 0;
+  let bestGen = getGenStats()[0];
+  document.getElementById("stats").innerHTML = `<b>Overall:</b> ${ownedCount}/${total} (${overallPct}%)<div class="bar"><div style="width:${overallPct}%"></div></div><b>Filtered:</b> ${filteredOwned}/${filteredTotal} (${filteredPct}%)<div class="bar"><div style="width:${filteredPct}%"></div></div><b>Closest Gen:</b> Gen ${bestGen.gen}`;
+}
+function exportData(){ let data = JSON.stringify(owned); prompt("Copy your save:", data); }
+function importData(){ let data = prompt("Paste your save:"); if(data){ owned = JSON.parse(data); localStorage.setItem("owned", JSON.stringify(owned)); render(); } }
+document.getElementById("search").oninput=render;
+document.getElementById("status").onchange=render;
+document.getElementById("gen").onchange=render;
+render();
+</script>
+</body>
+</html>
