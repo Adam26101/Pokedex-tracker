@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokédex Tracker</title>
+
+<style>
+body { font-family: -apple-system, Arial; margin: 0; background: #f5f5f5; }
+
+header {
+  background: #ef5350;
+  color: white;
+  padding: 12px;
+  text-align: center;
+  font-size: 18px;
+}
+
+/* TOP BAR */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+}
+
+/* GRID FIXED TO 3 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+
+/* CARDS */
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 8px;
+  text-align: center;
+  transition: transform 0.1s;
+}
+.card:active { transform: scale(0.95); }
+
+.card img {
+  width: 64px;
+  height: 64px;
+  display: block;
+  margin: 0 auto;
+}
+
+.number { font-size: 11px; color: #666; }
+
+/* STATES */
+.ordered { background: #ffe0b2; }
+.owned { background: #c8e6c9; }
+
+/* HOME BUTTONS */
+.gen-card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+.gen-card img {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 6px;
+}
+</style>
+</head>
+
+<body>
+
+<header>Pokédex Tracker</header>
+
+<div id="home"></div>
+<div id="app" style="display:none;"></div>
+
+<script>
+
+const gens = [
+  {id:1, start:1, end:151},
+  {id:2, start:152, end:251},
+  {id:3, start:252, end:386},
+  {id:4, start:387, end:493},
+  {id:5, start:494, end:649},
+  {id:6, start:650, end:721},
+  {id:7, start:722, end:809},
+  {id:8, start:810, end:905},
+  {id:9, start:906, end:1025}
+];
+
+let owned = JSON.parse(localStorage.getItem("owned") || "{}");
+const namesCache = {};
+let loaded = false;
+
+async function loadNames(){
+  if(loaded) return;
+  let res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=2000");
+  let data = await res.json();
+  data.results.forEach((p, i)=>{
+    namesCache[i+1] = p.name.charAt(0).toUpperCase()+p.name.slice(1);
+  });
+  loaded = true;
+}
+
+function getGenPercent(gen){
+  let total = gen.end - gen.start + 1;
+  let count = 0;
+  for(let i=gen.start;i<=gen.end;i++){
+    if(owned[i] === 2) count++;
+  }
+  return Math.round((count/total)*100);
+}
+
+/* HOME */
+function showHome(){
+  document.getElementById("app").style.display="none";
+  let home = document.getElementById("home");
+  home.style.display="block";
+
+  let html = '<div class="grid">';
+  gens.forEach(g=>{
+    html += `
+      <div class="gen-card" onclick="openGen(${g.id})">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png">
+        Gen ${g.id}
+        <div>${getGenPercent(g)}%</div>
+      </div>
+    `;
+  });
+  html += '</div>';
+
+  home.innerHTML = html;
+}
+
+/* GEN VIEW */
+async function openGen(id){
+  await loadNames();
+
+  document.getElementById("home").style.display="none";
+  let app = document.getElementById("app");
+  app.style.display="block";
+
+  let gen = gens.find(g=>g.id===id);
+
+  let html = `
+    <div class="topbar">
+      <button onclick="showHome()">← Back</button>
+      <b>Gen ${id}</b>
+      <button onclick="save()">Save</button>
+    </div>
+    <div class="grid">
+  `;
+
+  for(let i=gen.start;i<=gen.end;i++){
+    let state = owned[i] || 0;
+
+    html += `
+      <div class="card ${state==2?'owned':state==1?'ordered':''}" onclick="toggle(${i})">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i}.png">
+        <div class="number">#${i}</div>
+        <div>${namesCache[i]}</div>
+      </div>
+    `;
+  }
+
+  html += '</div>';
+  app.innerHTML = html;
+}
+
+/* TOGGLE STATES */
+function toggle(id){
+  let state = owned[id] || 0;
+  state = (state + 1) % 3;
+  owned[id] = state;
+
+  localStorage.setItem("owned", JSON.stringify(owned));
+
+  openGen(getCurrentGen());
+}
+
+function getCurrentGen(){
+  let text = document.querySelector(".topbar b").innerText;
+  return parseInt(text.replace("Gen ",""));
+}
+
+function save(){
+  localStorage.setItem("owned", JSON.stringify(owned));
+  alert("Saved!");
+}
+
+showHome();
+
+</script>
+
+</body>
+</html>
