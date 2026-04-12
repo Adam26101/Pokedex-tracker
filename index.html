@@ -3,323 +3,810 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pokédex Tracker</title>
+<title>Pokédex Tracker Ultimate</title>
 
 <style>
 :root{
-  --bg: #ececec;
-  --panel: #ffffff;
-  --brand: #ef5350;
-  --text: #1f1f1f;
-  --muted: #666;
-  --ordered: #ffe0b2;
-  --owned: #c8e6c9;
-  --track: #e6e6e6;
-  --fill: #4caf50;
-  --shadow: 0 6px 18px rgba(0,0,0,0.08);
-  --radius: 18px;
+  --bg1:#0f172a;
+  --bg2:#1e293b;
+  --panel:#ffffff;
+  --panel-soft:#f8fafc;
+  --text:#0f172a;
+  --muted:#64748b;
+  --brand:#ef5350;
+  --brand-dark:#d32f2f;
+  --yellow:#ffcb05;
+  --blue:#2a75bb;
+  --owned:#c8f7c5;
+  --ordered:#ffe7b3;
+  --missing:#ffffff;
+  --fav:#fff0f4;
+  --track:#e2e8f0;
+  --fill:#22c55e;
+  --shadow:0 10px 30px rgba(0,0,0,0.12);
+  --shadow-soft:0 6px 18px rgba(0,0,0,0.10);
+  --radius:20px;
+  --radius-sm:14px;
 }
 
-* { box-sizing: border-box; }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,0.06), transparent 25%),
+    linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 220px, #eef2f7 220px, #eef2f7 100%);
+  color:var(--text);
 }
 
-header {
-  background: var(--brand);
-  color: white;
-  padding: 18px 16px;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(255,255,255,0.12), transparent 18%),
+    radial-gradient(circle at 88% 25%, rgba(255,255,255,0.10), transparent 18%),
+    linear-gradient(135deg, #ef5350 0%, #d32f2f 100%);
+  color:#fff;
+  padding:14px 14px 18px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.15);
 }
 
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  padding: 12px;
+.header-inner{
+  max-width:1100px;
+  margin:0 auto;
 }
 
-.topbar-center {
-  text-align: center;
-  flex: 1;
-  font-weight: 700;
+.logo-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
 }
 
-button {
-  padding: 10px 14px;
-  border: none;
-  border-radius: 12px;
-  background: white;
-  color: var(--text);
-  cursor: pointer;
-  box-shadow: var(--shadow);
-  font-weight: 600;
+.logo-row img{
+  height:52px;
+  width:auto;
+  display:block;
+  filter:drop-shadow(0 3px 6px rgba(0,0,0,0.25));
 }
 
-.home-wrap {
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+.header-sub{
+  text-align:center;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.4px;
+  opacity:.95;
+  margin-top:4px;
 }
 
-.home-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+.shell{
+  max-width:1100px;
+  margin:0 auto;
+  padding:14px;
 }
 
-.gen-card {
-  background: var(--panel);
-  border-radius: 20px;
-  padding: 14px 10px;
-  box-shadow: var(--shadow);
-  text-align: center;
-  min-height: 150px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.hidden{display:none !important}
+
+button, select, input, textarea{
+  font:inherit;
 }
 
-.gen-title {
-  font-size: 22px;
-  font-weight: 800;
-  line-height: 1;
-  margin-top: 4px;
+button{
+  border:none;
+  border-radius:14px;
+  padding:10px 14px;
+  font-weight:800;
+  cursor:pointer;
+  background:#fff;
+  color:var(--text);
+  box-shadow:var(--shadow-soft);
 }
 
-.gen-subtitle {
-  font-size: 13px;
-  color: var(--muted);
-  margin-top: 2px;
+button.primary{
+  background:linear-gradient(135deg, var(--yellow), #ffd84d);
+  color:#1f2937;
 }
 
-.gen-stats {
-  font-size: 16px;
-  font-weight: 700;
-  margin-top: 8px;
+button.secondary{
+  background:#fff;
 }
 
-.gen-pct {
-  font-size: 14px;
-  color: var(--muted);
-  margin-top: 2px;
+button.danger{
+  background:#fee2e2;
+  color:#991b1b;
 }
 
-.progress {
-  height: 10px;
-  background: var(--track);
-  border-radius: 999px;
-  overflow: hidden;
-  margin-top: 10px;
+button.ghost{
+  background:#f8fafc;
 }
 
-.progress-fill {
-  height: 100%;
-  background: var(--fill);
-  border-radius: 999px;
+button.small{
+  padding:8px 10px;
+  border-radius:12px;
+  font-size:13px;
 }
 
-.gen-view {
-  padding-bottom: 16px;
+.topbar{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
 }
 
-.gen-summary {
-  background: var(--panel);
-  margin: 0 12px 12px;
-  padding: 14px;
-  border-radius: 18px;
-  box-shadow: var(--shadow);
+.topbar-center{
+  flex:1;
+  text-align:center;
+  font-weight:900;
+  color:#fff;
 }
 
-.summary-line {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  font-weight: 700;
+.section{
+  background:var(--panel);
+  border-radius:24px;
+  padding:16px;
+  box-shadow:var(--shadow);
+  margin-bottom:14px;
 }
 
-.summary-line .muted {
-  color: var(--muted);
-  font-weight: 600;
+.hero{
+  overflow:hidden;
+  position:relative;
+  background:
+    radial-gradient(circle at top right, rgba(255,203,5,0.26), transparent 25%),
+    radial-gradient(circle at bottom left, rgba(42,117,187,0.16), transparent 25%),
+    linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
 }
 
-.search-panel {
-  background: var(--panel);
-  margin: 0 12px 12px;
-  padding: 12px;
-  border-radius: 18px;
-  box-shadow: var(--shadow);
+.hero:before{
+  content:"";
+  position:absolute;
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  right:-40px;
+  top:-40px;
+  background:rgba(239,83,80,0.10);
 }
 
-.search-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+.hero-title{
+  font-size:28px;
+  font-weight:900;
+  margin:0 0 6px;
+  line-height:1;
 }
 
-.search-input {
-  flex: 1;
-  min-width: 0;
-  padding: 12px 14px;
-  border: none;
-  outline: none;
-  border-radius: 12px;
-  font-size: 16px;
-  background: #f3f3f3;
-  color: var(--text);
+.hero-sub{
+  color:var(--muted);
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:16px;
 }
 
-.search-input::placeholder {
-  color: #8b8b8b;
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
 }
 
-.clear-btn {
-  flex: 0 0 auto;
+.stat-card{
+  background:var(--panel-soft);
+  border-radius:18px;
+  padding:14px 10px;
+  text-align:center;
 }
 
-.search-results {
-  margin-top: 12px;
+.stat-value{
+  font-size:24px;
+  font-weight:900;
+  line-height:1;
+  margin-bottom:6px;
 }
 
-.search-helper {
-  font-size: 12px;
-  color: var(--muted);
-  padding-top: 2px;
+.stat-label{
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.4px;
+  text-transform:uppercase;
+  color:var(--muted);
 }
 
-.search-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+.progress{
+  height:12px;
+  background:var(--track);
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:12px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  padding: 0 12px;
+.progress-fill{
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg, #22c55e, #16a34a);
 }
 
-.card {
-  background: var(--panel);
-  border-radius: 16px;
-  padding: 10px 6px 8px;
-  text-align: center;
-  transition: transform 0.1s ease;
-  min-height: 136px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow);
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
+.panel-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:12px;
 }
 
-.card:active { transform: scale(0.97); }
-
-.card img {
-  width: 58px;
-  height: 58px;
-  display: block;
-  margin: 0 auto 4px;
-  object-fit: contain;
-  pointer-events: none;
+.panel-title h2,
+.panel-title h3{
+  margin:0;
+  font-size:18px;
+  font-weight:900;
 }
 
-.number {
-  font-size: 11px;
-  color: var(--muted);
-  margin-bottom: 3px;
-  pointer-events: none;
+.panel-note{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
 }
 
-.name {
-  font-size: 12px;
-  line-height: 1.15;
-  font-weight: 600;
-  pointer-events: none;
-  word-break: break-word;
+.toolbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
 }
 
-.name.small { font-size: 11px; }
-.name.xsmall { font-size: 10px; }
-
-.ordered { background: var(--ordered); }
-.owned { background: var(--owned); }
-
-.state-label {
-  margin-top: 5px;
-  font-size: 10px;
-  color: var(--muted);
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  pointer-events: none;
+.search-panel{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
-.empty-search {
-  text-align: center;
-  color: var(--muted);
-  font-size: 13px;
-  padding: 8px 4px 2px;
+.search-row{
+  display:flex;
+  gap:8px;
 }
 
-@media (max-width: 390px) {
-  .gen-card { min-height: 142px; padding: 12px 8px; }
-  .gen-title { font-size: 20px; }
-  .gen-stats { font-size: 15px; }
-  .card { min-height: 130px; }
-  .card img { width: 54px; height: 54px; }
+.search-input{
+  flex:1;
+  min-width:0;
+  border:none;
+  outline:none;
+  background:#f1f5f9;
+  border-radius:14px;
+  padding:13px 14px;
+  color:var(--text);
+  font-size:16px;
+}
+
+.helper{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+}
+
+.filter-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.chip{
+  padding:9px 12px;
+  border-radius:999px;
+  background:#f8fafc;
+  border:2px solid transparent;
+  box-shadow:none;
+  font-size:13px;
+  font-weight:800;
+}
+
+.chip.active{
+  background:#fff7cc;
+  border-color:#ffe082;
+}
+
+.controls-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1fr;
+  gap:10px;
+}
+
+select{
+  width:100%;
+  border:none;
+  outline:none;
+  background:#f1f5f9;
+  border-radius:14px;
+  padding:13px 14px;
+  color:var(--text);
+}
+
+.home-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.gen-card{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(180deg,#fff 0%, #f8fafc 100%);
+  border-radius:22px;
+  padding:14px;
+  min-height:185px;
+  text-align:center;
+  box-shadow:var(--shadow);
+  cursor:pointer;
+  transition:transform .12s ease;
+}
+
+.gen-card:active{
+  transform:scale(.98);
+}
+
+.gen-card:before{
+  content:"";
+  position:absolute;
+  width:96px;
+  height:96px;
+  border-radius:50%;
+  top:-28px;
+  right:-28px;
+  background:rgba(255,255,255,0.55);
+}
+
+.region-badge{
+  width:58px;
+  height:58px;
+  border-radius:18px;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  font-size:20px;
+  margin:0 auto 10px;
+  box-shadow:var(--shadow-soft);
+  position:relative;
+  z-index:1;
+}
+
+.gen-title{
+  font-size:22px;
+  font-weight:900;
+  margin:0 0 4px;
+  position:relative;
+  z-index:1;
+}
+
+.gen-subtitle{
+  font-size:13px;
+  color:var(--muted);
+  font-weight:800;
+  margin-bottom:12px;
+  position:relative;
+  z-index:1;
+}
+
+.gen-stats{
+  font-size:18px;
+  font-weight:900;
+  position:relative;
+  z-index:1;
+}
+
+.gen-pct{
+  font-size:13px;
+  color:var(--muted);
+  font-weight:800;
+  margin-top:4px;
+  position:relative;
+  z-index:1;
+}
+
+.two-col{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:14px;
+}
+
+.side-stack{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.spotlight{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:linear-gradient(135deg, #fff7ed 0%, #fffbeb 100%);
+}
+
+.spotlight img{
+  width:84px;
+  height:84px;
+  object-fit:contain;
+  flex:0 0 auto;
+}
+
+.spotlight-name{
+  font-size:20px;
+  font-weight:900;
+  margin-bottom:4px;
+}
+
+.spotlight-num{
+  color:var(--muted);
+  font-weight:800;
+  margin-bottom:8px;
+  font-size:13px;
+}
+
+.badge-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.achievement{
+  background:#f8fafc;
+  border-radius:14px;
+  padding:10px 12px;
+  font-weight:800;
+  font-size:13px;
+}
+
+.activity-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.activity-item{
+  background:#f8fafc;
+  border-radius:14px;
+  padding:10px 12px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+}
+
+.grid.compact{
+  grid-template-columns:repeat(6,1fr);
+}
+
+.card{
+  position:relative;
+  background:var(--missing);
+  border-radius:18px;
+  padding:10px 8px 8px;
+  min-height:158px;
+  text-align:center;
+  box-shadow:var(--shadow-soft);
+  transition:transform .1s ease, box-shadow .1s ease;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+}
+
+.card:active{
+  transform:scale(.98);
+}
+
+.card.ordered{
+  background:var(--ordered);
+}
+
+.card.owned{
+  background:var(--owned);
+}
+
+.card.fav-ring{
+  box-shadow:0 0 0 2px #f9a8d4 inset, var(--shadow-soft);
+}
+
+.card-main{
+  cursor:pointer;
+}
+
+.card img{
+  width:72px;
+  height:72px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 4px;
+  pointer-events:none;
+}
+
+.compact .card{
+  min-height:136px;
+  padding:9px 7px 7px;
+}
+
+.compact .card img{
+  width:58px;
+  height:58px;
+}
+
+.number{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:800;
+  margin-bottom:3px;
+  pointer-events:none;
+}
+
+.name{
+  font-size:12px;
+  line-height:1.15;
+  font-weight:800;
+  word-break:break-word;
+  pointer-events:none;
+}
+
+.name.small{font-size:11px}
+.name.xsmall{font-size:10px}
+
+.state-label{
+  margin-top:5px;
+  font-size:10px;
+  color:var(--muted);
+  font-weight:900;
+  letter-spacing:.3px;
+  pointer-events:none;
+}
+
+.card-actions{
+  position:absolute;
+  top:7px;
+  right:7px;
+  display:flex;
+  gap:5px;
+}
+
+.icon-btn{
+  width:28px;
+  height:28px;
+  border-radius:999px;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,0.82);
+  box-shadow:none;
+  font-size:14px;
+  border:1px solid rgba(0,0,0,0.05);
+}
+
+.icon-btn.active{
+  background:#ffe4ef;
+}
+
+.muted{
+  color:var(--muted);
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:16px 8px;
+  font-weight:700;
+}
+
+.footer-space{
+  height:30px;
+}
+
+.quick-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.inline-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.mini-stat{
+  background:#f8fafc;
+  border-radius:14px;
+  padding:12px 10px;
+  text-align:center;
+}
+
+.mini-stat-value{
+  font-size:20px;
+  font-weight:900;
+  line-height:1;
+  margin-bottom:4px;
+}
+
+.mini-stat-label{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+}
+
+.note-box{
+  background:#eff6ff;
+  color:#1d4ed8;
+  border-radius:14px;
+  padding:10px 12px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.file-input{
+  display:none;
+}
+
+@media (max-width: 900px){
+  .home-grid{grid-template-columns:repeat(2,1fr)}
+  .two-col{grid-template-columns:1fr}
+  .grid{grid-template-columns:repeat(4,1fr)}
+  .grid.compact{grid-template-columns:repeat(5,1fr)}
+}
+
+@media (max-width: 640px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .controls-grid{grid-template-columns:1fr}
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .grid.compact{grid-template-columns:repeat(4,1fr)}
+  .logo-row img{height:46px}
+  .hero-title{font-size:24px}
+}
+
+@media (max-width: 390px){
+  .home-grid{grid-template-columns:repeat(2,1fr)}
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .grid.compact{grid-template-columns:repeat(3,1fr)}
+  .card{min-height:146px}
+  .card img{width:62px;height:62px}
 }
 </style>
 </head>
 <body>
 
-<header>Pokédex Tracker</header>
+<header>
+  <div class="header-inner">
+    <div class="logo-row">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg" alt="Pokémon">
+    </div>
+    <div class="header-sub">Ultimate Pokédex Collection Tracker</div>
+  </div>
+</header>
 
-<div id="home"></div>
-<div id="app" style="display:none;"></div>
+<div class="shell">
+  <div id="home"></div>
+  <div id="app" class="hidden"></div>
+  <div class="footer-space"></div>
+</div>
+
+<input id="import-file" class="file-input" type="file" accept=".json,application/json">
 
 <script>
+const TOTAL_POKEMON = 1025;
+
 const gens = [
-  {id:1, start:1, end:151},
-  {id:2, start:152, end:251},
-  {id:3, start:252, end:386},
-  {id:4, start:387, end:493},
-  {id:5, start:494, end:649},
-  {id:6, start:650, end:721},
-  {id:7, start:722, end:809},
-  {id:8, start:810, end:905},
-  {id:9, start:906, end:1025}
+  {id:1, start:1, end:151, region:"Kanto", badge:"KA", color:"linear-gradient(135deg,#ef5350,#fb8c00)"},
+  {id:2, start:152, end:251, region:"Johto", badge:"JO", color:"linear-gradient(135deg,#42a5f5,#5c6bc0)"},
+  {id:3, start:252, end:386, region:"Hoenn", badge:"HO", color:"linear-gradient(135deg,#26a69a,#66bb6a)"},
+  {id:4, start:387, end:493, region:"Sinnoh", badge:"SI", color:"linear-gradient(135deg,#7e57c2,#5c6bc0)"},
+  {id:5, start:494, end:649, region:"Unova", badge:"UN", color:"linear-gradient(135deg,#8d6e63,#374151)"},
+  {id:6, start:650, end:721, region:"Kalos", badge:"KL", color:"linear-gradient(135deg,#29b6f6,#26c6da)"},
+  {id:7, start:722, end:809, region:"Alola", badge:"AL", color:"linear-gradient(135deg,#ffb300,#ff7043)"},
+  {id:8, start:810, end:905, region:"Galar", badge:"GA", color:"linear-gradient(135deg,#ec4899,#8b5cf6)"},
+  {id:9, start:906, end:1025, region:"Paldea", badge:"PA", color:"linear-gradient(135deg,#66bb6a,#26a69a)"}
 ];
 
 let owned = JSON.parse(localStorage.getItem("owned") || "{}");
+let favourites = JSON.parse(localStorage.getItem("favourites") || "{}");
+let activityLog = JSON.parse(localStorage.getItem("activityLog") || "[]");
+let settings = JSON.parse(localStorage.getItem("settings") || JSON.stringify({
+  cardSize:"comfy",
+  sort:"number",
+  homeSearch:"",
+  genSearch:"",
+  statusFilter:"all"
+}));
+
 const namesCache = {};
 let loaded = false;
-let homeSearch = "";
-let genSearch = "";
+let currentGenId = null;
+
+function saveAll(){
+  localStorage.setItem("owned", JSON.stringify(owned));
+  localStorage.setItem("favourites", JSON.stringify(favourites));
+  localStorage.setItem("activityLog", JSON.stringify(activityLog.slice(0, 40)));
+  localStorage.setItem("settings", JSON.stringify(settings));
+}
+
+function cap(str){
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 async function loadNames(){
   if(loaded) return;
-  const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=2000");
-  const data = await res.json();
-  data.results.forEach((p, i) => {
-    namesCache[i + 1] = p.name.charAt(0).toUpperCase() + p.name.slice(1);
-  });
-  loaded = true;
+  try{
+    const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=2000");
+    const data = await res.json();
+    data.results.forEach((p, i) => {
+      let name = p.name
+        .split("-")
+        .map(part => cap(part))
+        .join(" ");
+      namesCache[i + 1] = name;
+    });
+    loaded = true;
+  }catch(err){
+    for(let i=1;i<=TOTAL_POKEMON;i++){
+      namesCache[i] = "Pokemon " + i;
+    }
+    loaded = true;
+  }
+}
+
+function getPokemonName(id){
+  return namesCache[id] || ("Pokemon " + id);
+}
+
+function getNameClass(name){
+  if(name.length >= 15) return "name xsmall";
+  if(name.length >= 11) return "name small";
+  return "name";
+}
+
+function getStateLabel(state){
+  return state === 2 ? "Owned" : state === 1 ? "Ordered" : "Missing";
+}
+
+function getStateClass(state){
+  return state === 2 ? "owned" : state === 1 ? "ordered" : "";
+}
+
+function getStateWeight(state){
+  if(state === 2) return 2;
+  if(state === 1) return 1;
+  return 0;
+}
+
+function formatTime(ts){
+  const d = new Date(ts);
+  return d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+}
+
+function addActivity(text){
+  activityLog.unshift({text, ts:Date.now()});
+  activityLog = activityLog.slice(0, 25);
+  saveAll();
+}
+
+function getCounts(rangeStart = 1, rangeEnd = TOTAL_POKEMON){
+  let ownedCount = 0;
+  let orderedCount = 0;
+  let favouriteCount = 0;
+  const total = rangeEnd - rangeStart + 1;
+
+  for(let i = rangeStart; i <= rangeEnd; i++){
+    if(owned[i] === 2) ownedCount++;
+    else if(owned[i] === 1) orderedCount++;
+    if(favourites[i]) favouriteCount++;
+  }
+
+  const missingCount = total - ownedCount - orderedCount;
+  const pct = Math.round((ownedCount / total) * 100);
+
+  return { total, ownedCount, orderedCount, missingCount, favouriteCount, pct };
 }
 
 function getGenById(id){
@@ -327,17 +814,7 @@ function getGenById(id){
 }
 
 function getGenCounts(gen){
-  const total = gen.end - gen.start + 1;
-  let ownedCount = 0;
-  let orderedCount = 0;
-
-  for(let i = gen.start; i <= gen.end; i++){
-    if(owned[i] === 2) ownedCount++;
-    else if(owned[i] === 1) orderedCount++;
-  }
-
-  const pct = Math.round((ownedCount / total) * 100);
-  return { total, ownedCount, orderedCount, pct };
+  return getCounts(gen.start, gen.end);
 }
 
 function progressBar(percent){
@@ -348,232 +825,665 @@ function progressBar(percent){
   `;
 }
 
-function getNameClass(name){
-  if(name.length >= 15) return "name xsmall";
-  if(name.length >= 11) return "name small";
-  return "name";
+function renderRegionBadge(gen){
+  return `<div class="region-badge" style="background:${gen.color}">${gen.badge}</div>`;
 }
 
-function getStateClass(state){
-  return state === 2 ? "owned" : state === 1 ? "ordered" : "";
+function searchPokemonIds(query, start = 1, end = TOTAL_POKEMON){
+  const q = query.trim().toLowerCase();
+  if(!q) return Array.from({length:end-start+1}, (_,i)=>start+i);
+
+  const isNumber = /^\d+$/.test(q);
+  const results = [];
+
+  if(isNumber){
+    const id = parseInt(q, 10);
+    if(id >= start && id <= end) results.push(id);
+    return results;
+  }
+
+  for(let i=start;i<=end;i++){
+    const name = getPokemonName(i).toLowerCase();
+    if(name === q) results.unshift(i);
+    else if(name.includes(q)) results.push(i);
+  }
+  return results;
 }
 
-function getStateLabel(state){
-  return state === 2 ? "Owned" : state === 1 ? "Ordered" : "";
+function applyStatusFilter(ids){
+  const filter = settings.statusFilter;
+  if(filter === "all") return ids;
+  if(filter === "missing") return ids.filter(id => (owned[id] || 0) === 0);
+  if(filter === "ordered") return ids.filter(id => (owned[id] || 0) === 1);
+  if(filter === "owned") return ids.filter(id => (owned[id] || 0) === 2);
+  if(filter === "favourites") return ids.filter(id => !!favourites[id]);
+  return ids;
+}
+
+function sortPokemonIds(ids){
+  const sort = settings.sort;
+
+  return ids.slice().sort((a,b) => {
+    if(sort === "number") return a - b;
+
+    if(sort === "name"){
+      return getPokemonName(a).localeCompare(getPokemonName(b)) || a - b;
+    }
+
+    if(sort === "status"){
+      const diff = getStateWeight(owned[b] || 0) - getStateWeight(owned[a] || 0);
+      if(diff !== 0) return diff;
+      return a - b;
+    }
+
+    if(sort === "favourites"){
+      const favDiff = (favourites[b] ? 1 : 0) - (favourites[a] ? 1 : 0);
+      if(favDiff !== 0) return favDiff;
+      const stateDiff = getStateWeight(owned[b] || 0) - getStateWeight(owned[a] || 0);
+      if(stateDiff !== 0) return stateDiff;
+      return a - b;
+    }
+
+    return a - b;
+  });
+}
+
+function getFilteredIds(start = 1, end = TOTAL_POKEMON, query = ""){
+  let ids = searchPokemonIds(query, start, end);
+  ids = applyStatusFilter(ids);
+  ids = sortPokemonIds(ids);
+  return ids;
 }
 
 function renderPokemonCard(id){
   const state = owned[id] || 0;
-  const name = namesCache[id] || ("Pokemon " + id);
-  const nameClass = getNameClass(name);
-  const stateLabel = getStateLabel(state);
+  const name = getPokemonName(id);
+  const isFav = !!favourites[id];
 
   return `
-    <div class="card ${getStateClass(state)}" onclick="toggle(${id})">
-      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png" alt="${name}">
-      <div class="number">#${id}</div>
-      <div class="${nameClass}">${name}</div>
-      <div class="state-label">${stateLabel}</div>
+    <div class="card ${getStateClass(state)} ${isFav ? 'fav-ring' : ''}">
+      <div class="card-actions">
+        <button class="icon-btn ${isFav ? 'active' : ''}" onclick="toggleFavourite(event, ${id})" aria-label="Toggle favourite">
+          ${isFav ? "★" : "☆"}
+        </button>
+      </div>
+
+      <div class="card-main" onclick="toggleState(${id})">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png" alt="${name}">
+        <div class="number">#${id}</div>
+        <div class="${getNameClass(name)}">${name}</div>
+        <div class="state-label">${getStateLabel(state)}</div>
+      </div>
     </div>
   `;
 }
 
-function searchPokemon(query, start = 1, end = 1025){
-  const trimmed = query.trim().toLowerCase();
-  if(!trimmed) return [];
-
-  const results = [];
-  const isNumber = /^\d+$/.test(trimmed);
-
-  if(isNumber){
-    const id = parseInt(trimmed, 10);
-    if(id >= start && id <= end && namesCache[id]){
-      results.push(id);
-    }
-    return results;
+function getRandomMissingId(){
+  const missing = [];
+  for(let i=1;i<=TOTAL_POKEMON;i++){
+    if((owned[i] || 0) === 0) missing.push(i);
   }
-
-  for(let i = start; i <= end; i++){
-    const name = (namesCache[i] || "").toLowerCase();
-    if(name === trimmed){
-      results.unshift(i);
-    } else if(name.includes(trimmed)){
-      results.push(i);
-    }
-    if(results.length >= 12) break;
-  }
-
-  return results;
+  if(!missing.length) return null;
+  return missing[Math.floor(Math.random() * missing.length)];
 }
 
-function renderSearchSection(query, inputId, onInputFn, clearFn, start = 1, end = 1025){
-  const results = searchPokemon(query, start, end);
+function getAchievements(counts){
+  const achievements = [];
 
-  let resultsHtml = "";
-  if(query.trim()){
-    if(results.length){
-      resultsHtml = `
-        <div class="search-results">
-          <div class="search-grid">
-            ${results.map(id => renderPokemonCard(id)).join("")}
+  if(counts.ownedCount >= 1) achievements.push("Starter Trainer");
+  if(counts.ownedCount >= 25) achievements.push("Route Explorer");
+  if(counts.ownedCount >= 100) achievements.push("Gym Challenger");
+  if(counts.ownedCount >= 251) achievements.push("Johto Conqueror");
+  if(counts.ownedCount >= 500) achievements.push("Regional Master");
+  if(counts.ownedCount >= 750) achievements.push("Elite Collector");
+  if(counts.ownedCount >= 900) achievements.push("Living Dex Hunter");
+  if(counts.ownedCount === TOTAL_POKEMON) achievements.push("Catch 'Em All!");
+
+  const fullyComplete = gens.filter(g => getGenCounts(g).ownedCount === getGenCounts(g).total).length;
+  if(fullyComplete >= 1) achievements.push("Generation Complete");
+  if(fullyComplete >= 3) achievements.push("Multi-Region Legend");
+  if(fullyComplete === gens.length) achievements.push("All Regions Cleared");
+
+  if(counts.favouriteCount >= 10) achievements.push("Fan Favourites");
+  if(counts.orderedCount >= 10) achievements.push("Incoming Mail Day");
+
+  return achievements;
+}
+
+function renderHome(){
+  currentGenId = null;
+  document.getElementById("app").classList.add("hidden");
+  const home = document.getElementById("home");
+  home.classList.remove("hidden");
+
+  const counts = getCounts();
+  const achievements = getAchievements(counts);
+  const randomMissingId = getRandomMissingId();
+  const recent = activityLog.slice(0, 6);
+
+  let html = `
+    <div class="section hero">
+      <div class="panel-title">
+        <h2>Collector Dashboard</h2>
+        <div class="panel-note">Tap a generation to dive in</div>
+      </div>
+
+      <div class="hero-title">Build your living Pokédex</div>
+      <div class="hero-sub">Track every Pokémon from #1 to #1025, mark orders, favourites, and chase what you still need.</div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">${counts.ownedCount}</div>
+          <div class="stat-label">Owned</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${counts.orderedCount}</div>
+          <div class="stat-label">Ordered</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${counts.missingCount}</div>
+          <div class="stat-label">Missing</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${counts.pct}%</div>
+          <div class="stat-label">Complete</div>
+        </div>
+      </div>
+
+      ${progressBar(counts.pct)}
+    </div>
+
+    <div class="section">
+      <div class="panel-title">
+        <h3>Search the full Pokédex</h3>
+        <div class="panel-note">By name or number</div>
+      </div>
+
+      <div class="search-panel">
+        <div class="search-row">
+          <input
+            id="home-search"
+            class="search-input"
+            type="text"
+            placeholder="Search all Pokémon..."
+            value="${escapeHtml(settings.homeSearch)}"
+            oninput="updateHomeSearch(this.value)"
+            autocomplete="off"
+            autocapitalize="none"
+            spellcheck="false"
+          >
+          <button onclick="clearHomeSearch()">Clear</button>
+        </div>
+
+        <div class="filter-row">
+          ${renderFilterChips()}
+        </div>
+
+        <div class="controls-grid">
+          <select onchange="updateSort(this.value)">
+            <option value="number" ${settings.sort==="number"?"selected":""}>Sort: Number</option>
+            <option value="name" ${settings.sort==="name"?"selected":""}>Sort: Name</option>
+            <option value="status" ${settings.sort==="status"?"selected":""}>Sort: Status</option>
+            <option value="favourites" ${settings.sort==="favourites"?"selected":""}>Sort: Favourites</option>
+          </select>
+
+          <select onchange="updateCardSize(this.value)">
+            <option value="comfy" ${settings.cardSize==="comfy"?"selected":""}>View: Comfy</option>
+            <option value="compact" ${settings.cardSize==="compact"?"selected":""}>View: Compact</option>
+          </select>
+
+          <button class="ghost" onclick="shuffleSpotlight()">New random chase</button>
+        </div>
+
+        <div class="helper">Tap a card to cycle Missing → Ordered → Owned. Tap the star to favourite.</div>
+      </div>
+    </div>
+  `;
+
+  if(randomMissingId){
+    html += `
+      <div class="two-col">
+        <div class="section spotlight">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${randomMissingId}.png" alt="${getPokemonName(randomMissingId)}">
+          <div>
+            <div class="panel-note">Random missing spotlight</div>
+            <div class="spotlight-name">${getPokemonName(randomMissingId)}</div>
+            <div class="spotlight-num">#${randomMissingId}</div>
+            <button class="primary small" onclick="jumpToPokemon(${randomMissingId})">Find it in the Pokédex</button>
           </div>
         </div>
-      `;
-    } else {
-      resultsHtml = `<div class="search-results"><div class="empty-search">No Pokémon found.</div></div>`;
-    }
+
+        <div class="side-stack">
+          <div class="section">
+            <div class="panel-title">
+              <h3>Achievements</h3>
+              <div class="panel-note">${achievements.length} unlocked</div>
+            </div>
+            <div class="badge-list">
+              ${achievements.length
+                ? achievements.map(a => `<div class="achievement">${a}</div>`).join("")
+                : `<div class="empty">No badges yet.</div>`}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
-  return `
-    <div class="search-panel">
-      <div class="search-row">
-        <input
-          id="${inputId}"
-          class="search-input"
-          type="text"
-          placeholder="Search name or number"
-          value="${query.replace(/"/g, '&quot;')}"
-          oninput="${onInputFn}(this.value)"
-          autocomplete="off"
-          autocapitalize="none"
-          spellcheck="false"
-        >
-        <button class="clear-btn" onclick="${clearFn}()">Clear</button>
+  html += `
+    <div class="section">
+      <div class="panel-title">
+        <h3>Generations</h3>
+        <div class="panel-note">Region progress</div>
       </div>
-      <div class="search-helper">Search by Pokédex number or Pokémon name.</div>
-      ${resultsHtml}
-    </div>
+
+      <div class="home-grid">
   `;
-}
 
-function showHome(){
-  document.getElementById("app").style.display = "none";
-  const home = document.getElementById("home");
-  home.style.display = "block";
-
-  let html = '<div class="home-wrap"><div class="home-grid">';
   gens.forEach(g => {
     const stats = getGenCounts(g);
     html += `
       <div class="gen-card" onclick="openGen(${g.id})">
-        <div>
-          <div class="gen-title">Gen ${g.id}</div>
-          <div class="gen-subtitle">Pokédex</div>
-        </div>
-        <div>
-          <div class="gen-stats">${stats.ownedCount}/${stats.total}</div>
-          <div class="gen-pct">${stats.pct}% owned</div>
-          ${progressBar(stats.pct)}
-        </div>
+        ${renderRegionBadge(g)}
+        <div class="gen-title">Gen ${g.id}</div>
+        <div class="gen-subtitle">${g.region}</div>
+        <div class="gen-stats">${stats.ownedCount}/${stats.total}</div>
+        <div class="gen-pct">${stats.pct}% owned</div>
+        ${progressBar(stats.pct)}
       </div>
     `;
   });
-  html += '</div>';
-  html += renderSearchSection(homeSearch, "home-search", "updateHomeSearch", "clearHomeSearch");
-  html += '</div>';
+
+  html += `
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="section">
+        <div class="panel-title">
+          <h3>Search results</h3>
+          <div class="panel-note">${getFilteredIds(1, TOTAL_POKEMON, settings.homeSearch).length} shown</div>
+        </div>
+        ${renderPokemonGrid(getFilteredIds(1, TOTAL_POKEMON, settings.homeSearch))}
+      </div>
+
+      <div class="side-stack">
+        <div class="section">
+          <div class="panel-title">
+            <h3>Recent activity</h3>
+            <div class="panel-note">Latest changes</div>
+          </div>
+          <div class="activity-list">
+            ${recent.length
+              ? recent.map(item => `<div class="activity-item">${escapeHtml(item.text)}<br><span class="muted">${formatTime(item.ts)}</span></div>`).join("")
+              : `<div class="empty">No activity yet.</div>`}
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="panel-title">
+            <h3>Backup & tools</h3>
+            <div class="panel-note">Keep your data safe</div>
+          </div>
+
+          <div class="quick-actions">
+            <button class="small" onclick="exportData()">Export backup</button>
+            <button class="small" onclick="document.getElementById('import-file').click()">Import backup</button>
+            <button class="small danger" onclick="resetAll()">Clear all progress</button>
+          </div>
+
+          <div class="note-box" style="margin-top:10px;">
+            Your collection is stored in this browser. Export a backup before switching device or clearing browser data.
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 
   home.innerHTML = html;
 }
 
-async function openGen(id){
-  await loadNames();
-
-  document.getElementById("home").style.display = "none";
-  const app = document.getElementById("app");
-  app.style.display = "block";
-
-  const gen = getGenById(id);
+function renderGenSummary(gen){
   const stats = getGenCounts(gen);
-
-  let html = `
-    <div class="gen-view">
-      <div class="topbar">
-        <button onclick="showHome()">← Back</button>
-        <div class="topbar-center">Gen ${id}</div>
-        <button onclick="save()">Save</button>
+  return `
+    <div class="section">
+      <div class="panel-title">
+        <h3>${gen.region} summary</h3>
+        <div class="panel-note">Gen ${gen.id}</div>
       </div>
 
-      <div class="gen-summary">
-        <div class="summary-line">
-          <span>${stats.ownedCount}/${stats.total} owned</span>
-          <span class="muted">${stats.pct}%</span>
+      <div class="inline-stats">
+        <div class="mini-stat">
+          <div class="mini-stat-value">${stats.ownedCount}</div>
+          <div class="mini-stat-label">Owned</div>
         </div>
-        ${progressBar(stats.pct)}
+        <div class="mini-stat">
+          <div class="mini-stat-value">${stats.orderedCount}</div>
+          <div class="mini-stat-label">Ordered</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-value">${stats.missingCount}</div>
+          <div class="mini-stat-label">Missing</div>
+        </div>
       </div>
 
-      ${renderSearchSection(genSearch, "gen-search", "updateGenSearch", "clearGenSearch", gen.start, gen.end)}
-
-      <div class="grid">
+      ${progressBar(stats.pct)}
+      <div class="helper" style="margin-top:8px;">${stats.pct}% complete • #${gen.start}–#${gen.end}</div>
+    </div>
   `;
+}
 
-  for(let i = gen.start; i <= gen.end; i++){
-    html += renderPokemonCard(i);
+function renderFilterChips(){
+  const chips = [
+    {id:"all", label:"All"},
+    {id:"missing", label:"Missing"},
+    {id:"ordered", label:"Ordered"},
+    {id:"owned", label:"Owned"},
+    {id:"favourites", label:"Favourites"}
+  ];
+
+  return chips.map(ch => `
+    <button class="chip ${settings.statusFilter===ch.id ? 'active' : ''}" onclick="updateStatusFilter('${ch.id}')">${ch.label}</button>
+  `).join("");
+}
+
+function renderPokemonGrid(ids){
+  if(!ids.length){
+    return `<div class="empty">No Pokémon match this filter.</div>`;
   }
 
-  html += `
+  return `
+    <div class="grid ${settings.cardSize === 'compact' ? 'compact' : ''}">
+      ${ids.map(id => renderPokemonCard(id)).join("")}
+    </div>
+  `;
+}
+
+function openGen(id){
+  currentGenId = id;
+  document.getElementById("home").classList.add("hidden");
+  const app = document.getElementById("app");
+  app.classList.remove("hidden");
+
+  const gen = getGenById(id);
+  const ids = getFilteredIds(gen.start, gen.end, settings.genSearch);
+
+  let html = `
+    <div class="topbar">
+      <button onclick="renderHome()">← Home</button>
+      <div class="topbar-center">${gen.region} • Gen ${gen.id}</div>
+      <button class="primary" onclick="saveAll(); alert('Saved!')">Save</button>
+    </div>
+
+    ${renderGenSummary(gen)}
+
+    <div class="section">
+      <div class="panel-title">
+        <h3>Browse Gen ${gen.id}</h3>
+        <div class="panel-note">${ids.length} shown</div>
       </div>
+
+      <div class="search-panel">
+        <div class="search-row">
+          <input
+            id="gen-search"
+            class="search-input"
+            type="text"
+            placeholder="Search this generation..."
+            value="${escapeHtml(settings.genSearch)}"
+            oninput="updateGenSearch(this.value)"
+            autocomplete="off"
+            autocapitalize="none"
+            spellcheck="false"
+          >
+          <button onclick="clearGenSearch()">Clear</button>
+        </div>
+
+        <div class="filter-row">
+          ${renderFilterChips()}
+        </div>
+
+        <div class="controls-grid">
+          <select onchange="updateSort(this.value)">
+            <option value="number" ${settings.sort==="number"?"selected":""}>Sort: Number</option>
+            <option value="name" ${settings.sort==="name"?"selected":""}>Sort: Name</option>
+            <option value="status" ${settings.sort==="status"?"selected":""}>Sort: Status</option>
+            <option value="favourites" ${settings.sort==="favourites"?"selected":""}>Sort: Favourites</option>
+          </select>
+
+          <select onchange="updateCardSize(this.value)">
+            <option value="comfy" ${settings.cardSize==="comfy"?"selected":""}>View: Comfy</option>
+            <option value="compact" ${settings.cardSize==="compact"?"selected":""}>View: Compact</option>
+          </select>
+
+          <button class="ghost" onclick="markGenOwned(${gen.id})">Complete gen</button>
+        </div>
+
+        <div class="quick-actions">
+          <button class="small" onclick="markGenState(${gen.id}, 0)">Mark all missing</button>
+          <button class="small" onclick="markGenState(${gen.id}, 1)">Mark all ordered</button>
+          <button class="small" onclick="markGenState(${gen.id}, 2)">Mark all owned</button>
+          <button class="small" onclick="clearGenFavourites(${gen.id})">Clear gen favourites</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      ${renderPokemonGrid(ids)}
     </div>
   `;
 
   app.innerHTML = html;
 }
 
+function toggleState(id){
+  const prev = owned[id] || 0;
+  const next = (prev + 1) % 3;
+  owned[id] = next;
+  saveAll();
+
+  const name = getPokemonName(id);
+  addActivity(`${name} (#${id}) set to ${getStateLabel(next)}`);
+
+  rerender();
+}
+
+function toggleFavourite(event, id){
+  event.stopPropagation();
+  favourites[id] = !favourites[id];
+  if(!favourites[id]) delete favourites[id];
+  saveAll();
+
+  const name = getPokemonName(id);
+  addActivity(`${name} (#${id}) ${favourites[id] ? 'added to favourites' : 'removed from favourites'}`);
+
+  rerender();
+}
+
 function updateHomeSearch(value){
-  homeSearch = value;
-  showHome();
-  const input = document.getElementById("home-search");
-  if(input) input.focus();
+  settings.homeSearch = value;
+  saveAll();
+  renderHome();
+  const el = document.getElementById("home-search");
+  if(el) el.focus();
 }
 
 function clearHomeSearch(){
-  homeSearch = "";
-  showHome();
+  settings.homeSearch = "";
+  saveAll();
+  renderHome();
 }
 
 function updateGenSearch(value){
-  genSearch = value;
-  openGen(getCurrentGen());
+  settings.genSearch = value;
+  saveAll();
+  if(currentGenId) openGen(currentGenId);
   setTimeout(() => {
-    const input = document.getElementById("gen-search");
-    if(input){
-      input.focus();
-      const len = input.value.length;
-      input.setSelectionRange(len, len);
+    const el = document.getElementById("gen-search");
+    if(el){
+      el.focus();
+      const len = el.value.length;
+      el.setSelectionRange(len, len);
     }
   }, 0);
 }
 
 function clearGenSearch(){
-  genSearch = "";
-  openGen(getCurrentGen());
+  settings.genSearch = "";
+  saveAll();
+  if(currentGenId) openGen(currentGenId);
 }
 
-function toggle(id){
-  let state = owned[id] || 0;
-  state = (state + 1) % 3;
-  owned[id] = state;
-  localStorage.setItem("owned", JSON.stringify(owned));
+function updateStatusFilter(value){
+  settings.statusFilter = value;
+  saveAll();
+  rerender();
+}
 
-  if(document.getElementById("app").style.display !== "none"){
-    openGen(getCurrentGen());
-  } else {
-    showHome();
+function updateSort(value){
+  settings.sort = value;
+  saveAll();
+  rerender();
+}
+
+function updateCardSize(value){
+  settings.cardSize = value;
+  saveAll();
+  rerender();
+}
+
+function rerender(){
+  if(currentGenId) openGen(currentGenId);
+  else renderHome();
+}
+
+function shuffleSpotlight(){
+  renderHome();
+}
+
+function jumpToPokemon(id){
+  const gen = gens.find(g => id >= g.start && id <= g.end);
+  if(!gen) return;
+  settings.genSearch = String(id);
+  saveAll();
+  openGen(gen.id);
+}
+
+function markGenState(genId, state){
+  const gen = getGenById(genId);
+  if(!gen) return;
+
+  for(let i=gen.start;i<=gen.end;i++){
+    owned[i] = state;
   }
+  saveAll();
+  addActivity(`${gen.region} marked as ${getStateLabel(state)}`);
+  openGen(genId);
 }
 
-function getCurrentGen(){
-  const text = document.querySelector(".topbar-center").innerText;
-  return parseInt(text.replace("Gen ", ""), 10);
+function markGenOwned(genId){
+  markGenState(genId, 2);
 }
 
-function save(){
-  localStorage.setItem("owned", JSON.stringify(owned));
-  alert("Saved!");
+function clearGenFavourites(genId){
+  const gen = getGenById(genId);
+  for(let i=gen.start;i<=gen.end;i++){
+    delete favourites[i];
+  }
+  saveAll();
+  addActivity(`Cleared favourites in ${gen.region}`);
+  openGen(genId);
 }
+
+function exportData(){
+  const payload = {
+    version:1,
+    exportedAt:new Date().toISOString(),
+    owned,
+    favourites,
+    activityLog,
+    settings
+  };
+
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "pokedex-tracker-backup.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+
+  addActivity("Exported collection backup");
+  rerender();
+}
+
+function importDataFromFile(file){
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const data = JSON.parse(e.target.result);
+
+      if(data.owned && typeof data.owned === "object") owned = data.owned;
+      if(data.favourites && typeof data.favourites === "object") favourites = data.favourites;
+      if(Array.isArray(data.activityLog)) activityLog = data.activityLog;
+      if(data.settings && typeof data.settings === "object"){
+        settings = {
+          cardSize:data.settings.cardSize || "comfy",
+          sort:data.settings.sort || "number",
+          homeSearch:"",
+          genSearch:"",
+          statusFilter:data.settings.statusFilter || "all"
+        };
+      }
+
+      saveAll();
+      addActivity("Imported collection backup");
+      rerender();
+      alert("Import complete!");
+    }catch(err){
+      alert("That backup file could not be read.");
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetAll(){
+  const ok = confirm("Clear all progress, favourites, and activity?");
+  if(!ok) return;
+
+  owned = {};
+  favourites = {};
+  activityLog = [];
+  settings = {
+    cardSize:"comfy",
+    sort:"number",
+    homeSearch:"",
+    genSearch:"",
+    statusFilter:"all"
+  };
+  saveAll();
+  renderHome();
+}
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+document.getElementById("import-file").addEventListener("change", function(e){
+  const file = e.target.files && e.target.files[0];
+  if(file) importDataFromFile(file);
+  e.target.value = "";
+});
 
 async function init(){
   await loadNames();
-  showHome();
+  renderHome();
 }
 
 init();
