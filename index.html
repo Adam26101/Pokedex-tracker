@@ -20,7 +20,6 @@
   --owned:#c8f7c5;
   --ordered:#ffe7b3;
   --missing:#ffffff;
-  --fav:#fff0f4;
   --track:#e2e8f0;
   --fill:#22c55e;
   --shadow:0 10px 30px rgba(0,0,0,0.12);
@@ -392,26 +391,6 @@ button.small{
   gap:14px;
 }
 
-.side-stack{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
-
-.activity-list{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.activity-item{
-  background:#f8fafc;
-  border-radius:14px;
-  padding:10px 12px;
-  font-size:13px;
-  font-weight:700;
-}
-
 .grid{
   display:grid;
   grid-template-columns:repeat(5,1fr);
@@ -442,10 +421,6 @@ button.small{
 
 .card.owned{
   background:var(--owned);
-}
-
-.card.fav-ring{
-  box-shadow:0 0 0 2px #f9a8d4 inset, var(--shadow-soft);
 }
 
 .card-main{
@@ -487,32 +462,6 @@ button.small{
   font-weight:900;
   letter-spacing:.3px;
   pointer-events:none;
-}
-
-.card-actions{
-  position:absolute;
-  top:7px;
-  right:7px;
-  display:flex;
-  gap:5px;
-}
-
-.icon-btn{
-  width:28px;
-  height:28px;
-  border-radius:999px;
-  padding:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(255,255,255,0.82);
-  box-shadow:none;
-  font-size:14px;
-  border:1px solid rgba(0,0,0,0.05);
-}
-
-.icon-btn.active{
-  background:#ffe4ef;
 }
 
 .muted{
@@ -628,81 +577,6 @@ button.small{
   letter-spacing:.4px;
 }
 
-.achievements-list{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-.achievement-card{
-  border-radius:18px;
-  padding:14px;
-  background:#f8fafc;
-  box-shadow:var(--shadow-soft);
-  border:2px solid transparent;
-}
-
-.achievement-card.complete{
-  background:linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
-  border-color:#bfdbfe;
-}
-
-.achievement-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:10px;
-  margin-bottom:8px;
-}
-
-.achievement-title{
-  font-size:16px;
-  font-weight:900;
-  margin-bottom:4px;
-}
-
-.achievement-desc{
-  font-size:13px;
-  color:var(--muted);
-  font-weight:700;
-}
-
-.achievement-status{
-  flex:0 0 auto;
-  font-size:11px;
-  font-weight:900;
-  letter-spacing:.4px;
-  text-transform:uppercase;
-  padding:7px 10px;
-  border-radius:999px;
-  background:#fff7cc;
-  color:#8a6400;
-}
-
-.achievement-card.complete .achievement-status{
-  background:#dbeafe;
-  color:#1d4ed8;
-}
-
-.achievement-meta{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  margin-top:8px;
-  font-size:12px;
-  color:var(--muted);
-  font-weight:800;
-}
-
-.bottom-link-wrap{
-  text-align:center;
-  margin-top:6px;
-}
-
-.bottom-link-wrap button{
-  background:#f8fafc;
-}
-
 @media (max-width: 900px){
   .home-grid{grid-template-columns:repeat(2,1fr)}
   .two-col{grid-template-columns:1fr}
@@ -738,7 +612,6 @@ button.small{
 <div class="shell">
   <div id="home"></div>
   <div id="app" class="hidden"></div>
-  <div id="achievements-page" class="hidden"></div>
   <div class="footer-space"></div>
 </div>
 
@@ -760,8 +633,6 @@ const gens = [
 ];
 
 let owned = JSON.parse(localStorage.getItem("owned") || "{}");
-let favourites = JSON.parse(localStorage.getItem("favourites") || "{}");
-let activityLog = JSON.parse(localStorage.getItem("activityLog") || "[]");
 let settings = JSON.parse(localStorage.getItem("settings") || JSON.stringify({
   homeSearch:"",
   genSearch:"",
@@ -780,8 +651,6 @@ let currentPage = "home";
 
 function saveAll(){
   localStorage.setItem("owned", JSON.stringify(owned));
-  localStorage.setItem("favourites", JSON.stringify(favourites));
-  localStorage.setItem("activityLog", JSON.stringify(activityLog.slice(0, 40)));
   localStorage.setItem("settings", JSON.stringify(settings));
 }
 
@@ -840,33 +709,20 @@ function getStateClass(state){
   return state === 2 ? "owned" : state === 1 ? "ordered" : "";
 }
 
-function formatTime(ts){
-  const d = new Date(ts);
-  return d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
-}
-
-function addActivity(text){
-  activityLog.unshift({text, ts:Date.now()});
-  activityLog = activityLog.slice(0, 25);
-  saveAll();
-}
-
 function getCounts(rangeStart = 1, rangeEnd = TOTAL_POKEMON){
   let ownedCount = 0;
   let orderedCount = 0;
-  let favouriteCount = 0;
   const total = rangeEnd - rangeStart + 1;
 
   for(let i = rangeStart; i <= rangeEnd; i++){
     if(owned[i] === 2) ownedCount++;
     else if(owned[i] === 1) orderedCount++;
-    if(favourites[i]) favouriteCount++;
   }
 
   const missingCount = total - ownedCount - orderedCount;
   const pct = Math.round((ownedCount / total) * 100);
 
-  return { total, ownedCount, orderedCount, missingCount, favouriteCount, pct };
+  return { total, ownedCount, orderedCount, missingCount, pct };
 }
 
 function getGenById(id){
@@ -926,7 +782,6 @@ function applyStatusFilter(ids){
   if(filter === "missing") return ids.filter(id => (owned[id] || 0) === 0);
   if(filter === "ordered") return ids.filter(id => (owned[id] || 0) === 1);
   if(filter === "owned") return ids.filter(id => (owned[id] || 0) === 2);
-  if(filter === "favourites") return ids.filter(id => !!favourites[id]);
   return ids;
 }
 
@@ -939,82 +794,15 @@ function getFilteredIds(start = 1, end = TOTAL_POKEMON, query = "", showAllWhenB
 function renderPokemonCard(id){
   const state = owned[id] || 0;
   const name = getPokemonName(id);
-  const isFav = !!favourites[id];
 
   return `
-    <div class="card ${getStateClass(state)} ${isFav ? 'fav-ring' : ''}">
-      <div class="card-actions">
-        <button class="icon-btn ${isFav ? 'active' : ''}" onclick="toggleFavourite(event, ${id})" aria-label="Toggle favourite">
-          ${isFav ? "★" : "☆"}
-        </button>
-      </div>
-
+    <div class="card ${getStateClass(state)}">
       <div class="card-main" onclick="toggleState(${id})">
         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png" alt="${name}">
         <div class="number">#${id}</div>
         <div class="${getNameClass(name)}">${name}</div>
         <div class="state-label">${getStateLabel(state)}</div>
       </div>
-    </div>
-  `;
-}
-
-function getAchievementData(){
-  const overall = getCounts();
-  const completedGens = gens.filter(g => getGenCounts(g).ownedCount === getGenCounts(g).total).length;
-
-  const defs = [
-    { key:"starter", title:"Starter Trainer", desc:"Own at least 1 Pokémon.", current:overall.ownedCount, target:1, unit:"owned" },
-    { key:"route", title:"Route Explorer", desc:"Own 25 Pokémon.", current:overall.ownedCount, target:25, unit:"owned" },
-    { key:"gym", title:"Gym Challenger", desc:"Own 100 Pokémon.", current:overall.ownedCount, target:100, unit:"owned" },
-    { key:"johto", title:"Johto Conqueror", desc:"Own 251 Pokémon.", current:overall.ownedCount, target:251, unit:"owned" },
-    { key:"regional", title:"Regional Master", desc:"Own 500 Pokémon.", current:overall.ownedCount, target:500, unit:"owned" },
-    { key:"elite", title:"Elite Collector", desc:"Own 750 Pokémon.", current:overall.ownedCount, target:750, unit:"owned" },
-    { key:"livingdex", title:"Living Dex Hunter", desc:"Own 900 Pokémon.", current:overall.ownedCount, target:900, unit:"owned" },
-    { key:"completeall", title:"Catch 'Em All!", desc:"Own all 1025 Pokémon.", current:overall.ownedCount, target:TOTAL_POKEMON, unit:"owned" },
-    { key:"gencomplete", title:"Generation Complete", desc:"Fully complete 1 generation.", current:completedGens, target:1, unit:"generations" },
-    { key:"multiregion", title:"Multi-Region Legend", desc:"Fully complete 3 generations.", current:completedGens, target:3, unit:"generations" },
-    { key:"allregions", title:"All Regions Cleared", desc:"Fully complete all 9 generations.", current:completedGens, target:gens.length, unit:"generations" },
-    { key:"favourites", title:"Fan Favourites", desc:"Mark 10 Pokémon as favourites.", current:overall.favouriteCount, target:10, unit:"favourites" },
-    { key:"ordered", title:"Incoming Mail Day", desc:"Have 10 Pokémon marked as ordered.", current:overall.orderedCount, target:10, unit:"ordered" }
-  ];
-
-  const items = defs.map(item => {
-    const rawPct = Math.round((Math.min(item.current, item.target) / item.target) * 100);
-    const complete = item.current >= item.target;
-    return {...item, pct:rawPct, complete};
-  });
-
-  items.sort((a,b) => {
-    if(a.complete !== b.complete) return a.complete ? 1 : -1;
-    if(a.pct !== b.pct) return b.pct - a.pct;
-    return a.title.localeCompare(b.title);
-  });
-
-  return items;
-}
-
-function renderAchievementList(){
-  const items = getAchievementData();
-
-  return `
-    <div class="achievements-list">
-      ${items.map(item => `
-        <div class="achievement-card ${item.complete ? 'complete' : ''}">
-          <div class="achievement-top">
-            <div>
-              <div class="achievement-title">${item.title}</div>
-              <div class="achievement-desc">${item.desc}</div>
-            </div>
-            <div class="achievement-status">${item.complete ? "Complete" : "In progress"}</div>
-          </div>
-          ${progressBar(item.pct, item.complete)}
-          <div class="achievement-meta">
-            <span>${item.current}/${item.target} ${item.unit}</span>
-            <span>${item.pct}% complete</span>
-          </div>
-        </div>
-      `).join("")}
     </div>
   `;
 }
@@ -1058,13 +846,11 @@ function renderHome(shouldScroll = true){
   currentGenId = null;
 
   document.getElementById("app").classList.add("hidden");
-  document.getElementById("achievements-page").classList.add("hidden");
 
   const home = document.getElementById("home");
   home.classList.remove("hidden");
 
   const counts = getCounts();
-  const recent = activityLog.slice(0, 6);
   const homeSearchResults = settings.homeSearchSubmitted
     ? getFilteredIds(1, TOTAL_POKEMON, settings.homeSearch, false)
     : [];
@@ -1077,7 +863,7 @@ function renderHome(shouldScroll = true){
       </div>
 
       <div class="hero-title">Build your living Pokédex</div>
-      <div class="hero-sub">Track every Pokémon from #1 to #1025, mark orders, favourites, and keep your collection moving.</div>
+      <div class="hero-sub">Track every Pokémon from #1 to #1025 and keep your collection moving.</div>
 
       <div class="stats-grid">
         <div class="stat-card">
@@ -1158,39 +944,22 @@ function renderHome(shouldScroll = true){
       </div>
     </div>
 
-    <div class="two-col">
-      <div class="section">
-        <div class="panel-title">
-          <h3>Recent activity</h3>
-          <div class="panel-note">Latest changes</div>
-        </div>
-        <div class="activity-list">
-          ${recent.length
-            ? recent.map(item => `<div class="activity-item">${escapeHtml(item.text)}<br><span class="muted">${formatTime(item.ts)}</span></div>`).join("")
-            : `<div class="empty">No activity yet.</div>`}
-        </div>
+    <div class="section">
+      <div class="panel-title">
+        <h3>Backup & tools</h3>
+        <div class="panel-note">Keep your data safe</div>
       </div>
 
-      <div class="section">
-        <div class="panel-title">
-          <h3>Backup & tools</h3>
-          <div class="panel-note">Keep your data safe</div>
-        </div>
-
-        <div class="quick-actions">
-          <button class="small" onclick="exportData()">Export backup</button>
-          <button class="small" onclick="document.getElementById('import-file').click()">Import backup</button>
-          <button class="small danger" onclick="resetAll()">Clear all progress</button>
-        </div>
-
-        <div class="note-box" style="margin-top:10px;">
-          Your collection is stored in this browser. Export a backup before switching device or clearing browser data.
-        </div>
+      <div class="quick-actions">
+        <button class="primary" onclick="saveAll(); alert('Saved!')">Save</button>
+        <button class="small" onclick="exportData()">Export backup</button>
+        <button class="small" onclick="document.getElementById('import-file').click()">Import backup</button>
+        <button class="small danger" onclick="resetAll()">Clear all progress</button>
       </div>
-    </div>
 
-    <div class="bottom-link-wrap">
-      <button onclick="openAchievements(true)">View achievements</button>
+      <div class="note-box" style="margin-top:10px;">
+        Your collection is stored in this browser. Export a backup before switching device or clearing browser data.
+      </div>
     </div>
   `;
 
@@ -1233,8 +1002,7 @@ function renderFilterChips(){
     {id:"all", label:"All"},
     {id:"missing", label:"Missing"},
     {id:"ordered", label:"Ordered"},
-    {id:"owned", label:"Owned"},
-    {id:"favourites", label:"Favourites"}
+    {id:"owned", label:"Owned"}
   ];
 
   return chips.map(ch => `
@@ -1259,7 +1027,6 @@ function openGen(id, shouldScroll = true){
   currentGenId = id;
 
   document.getElementById("home").classList.add("hidden");
-  document.getElementById("achievements-page").classList.add("hidden");
 
   const app = document.getElementById("app");
   app.classList.remove("hidden");
@@ -1306,7 +1073,6 @@ function openGen(id, shouldScroll = true){
           <button class="small" onclick="markGenState(${gen.id}, 0)">Mark all missing</button>
           <button class="small" onclick="markGenState(${gen.id}, 1)">Mark all ordered</button>
           <button class="small" onclick="markGenState(${gen.id}, 2)">Mark all owned</button>
-          <button class="small" onclick="clearGenFavourites(${gen.id})">Clear gen favourites</button>
         </div>
       </div>
     </div>
@@ -1320,63 +1086,11 @@ function openGen(id, shouldScroll = true){
   if(shouldScroll) scrollToTopAfterRender();
 }
 
-function openAchievements(shouldScroll = true){
-  currentPage = "achievements";
-  currentGenId = null;
-
-  document.getElementById("home").classList.add("hidden");
-  document.getElementById("app").classList.add("hidden");
-
-  const page = document.getElementById("achievements-page");
-  page.classList.remove("hidden");
-
-  const data = getAchievementData();
-  const completeCount = data.filter(a => a.complete).length;
-
-  page.innerHTML = `
-    <div class="topbar">
-      <button onclick="renderHome(true)">← Home</button>
-      <div class="topbar-center">Achievements</div>
-      <div style="width:74px;"></div>
-    </div>
-
-    <div class="section">
-      <div class="panel-title">
-        <h3>Achievement progress</h3>
-        <div class="panel-note">${completeCount}/${data.length} complete</div>
-      </div>
-      <div class="helper">In progress achievements are shown first by highest completion percentage. Completed ones are moved to the bottom.</div>
-    </div>
-
-    <div class="section">
-      ${renderAchievementList()}
-    </div>
-  `;
-
-  if(shouldScroll) scrollToTopAfterRender();
-}
-
 function toggleState(id){
   const prev = owned[id] || 0;
   const next = (prev + 1) % 3;
   owned[id] = next;
   saveAll();
-
-  const name = getPokemonName(id);
-  addActivity(`${name} (#${id}) set to ${getStateLabel(next)}`);
-
-  rerender(false);
-}
-
-function toggleFavourite(event, id){
-  event.stopPropagation();
-  favourites[id] = !favourites[id];
-  if(!favourites[id]) delete favourites[id];
-  saveAll();
-
-  const name = getPokemonName(id);
-  addActivity(`${name} (#${id}) ${favourites[id] ? 'added to favourites' : 'removed from favourites'}`);
-
   rerender(false);
 }
 
@@ -1441,10 +1155,6 @@ function rerender(shouldScroll = false){
     openGen(currentGenId, shouldScroll);
     return;
   }
-  if(currentPage === "achievements"){
-    openAchievements(shouldScroll);
-    return;
-  }
   renderHome(shouldScroll);
 }
 
@@ -1464,17 +1174,6 @@ function markGenState(genId, state){
     owned[i] = state;
   }
   saveAll();
-  addActivity(`${gen.region} marked as ${getStateLabel(state)}`);
-  openGen(genId, false);
-}
-
-function clearGenFavourites(genId){
-  const gen = getGenById(genId);
-  for(let i=gen.start;i<=gen.end;i++){
-    delete favourites[i];
-  }
-  saveAll();
-  addActivity(`Cleared favourites in ${gen.region}`);
   openGen(genId, false);
 }
 
@@ -1483,8 +1182,6 @@ function exportData(){
     version:1,
     exportedAt:new Date().toISOString(),
     owned,
-    favourites,
-    activityLog,
     settings
   };
 
@@ -1498,7 +1195,6 @@ function exportData(){
   a.remove();
   URL.revokeObjectURL(url);
 
-  addActivity("Exported collection backup");
   rerender(false);
 }
 
@@ -1509,8 +1205,6 @@ function importDataFromFile(file){
       const data = JSON.parse(e.target.result);
 
       if(data.owned && typeof data.owned === "object") owned = data.owned;
-      if(data.favourites && typeof data.favourites === "object") favourites = data.favourites;
-      if(Array.isArray(data.activityLog)) activityLog = data.activityLog;
       if(data.settings && typeof data.settings === "object"){
         settings = {
           homeSearch:"",
@@ -1521,7 +1215,6 @@ function importDataFromFile(file){
       }
 
       saveAll();
-      addActivity("Imported collection backup");
       rerender(false);
       alert("Import complete!");
     }catch(err){
@@ -1532,12 +1225,10 @@ function importDataFromFile(file){
 }
 
 function resetAll(){
-  const ok = confirm("Clear all progress, favourites, and activity?");
+  const ok = confirm("Clear all progress?");
   if(!ok) return;
 
   owned = {};
-  favourites = {};
-  activityLog = [];
   settings = {
     homeSearch:"",
     genSearch:"",
