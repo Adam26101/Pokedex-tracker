@@ -228,6 +228,10 @@ button.small{
   background:linear-gradient(90deg, #22c55e, #16a34a);
 }
 
+.progress-fill.complete{
+  background:linear-gradient(90deg, #2a75bb, #1d4ed8);
+}
+
 .panel-title{
   display:flex;
   align-items:center;
@@ -247,12 +251,6 @@ button.small{
   color:var(--muted);
   font-size:12px;
   font-weight:700;
-}
-
-.toolbar{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
 }
 
 .search-panel{
@@ -303,22 +301,6 @@ button.small{
 .chip.active{
   background:#fff7cc;
   border-color:#ffe082;
-}
-
-.controls-grid{
-  display:grid;
-  grid-template-columns:1.4fr 1fr 1fr;
-  gap:10px;
-}
-
-select{
-  width:100%;
-  border:none;
-  outline:none;
-  background:#f1f5f9;
-  border-radius:14px;
-  padding:13px 14px;
-  color:var(--text);
 }
 
 .home-grid{
@@ -406,7 +388,7 @@ select{
 
 .two-col{
   display:grid;
-  grid-template-columns:1.15fr .85fr;
+  grid-template-columns:1fr 1fr;
   gap:14px;
 }
 
@@ -414,47 +396,6 @@ select{
   display:flex;
   flex-direction:column;
   gap:14px;
-}
-
-.spotlight{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  background:linear-gradient(135deg, #fff7ed 0%, #fffbeb 100%);
-}
-
-.spotlight img{
-  width:84px;
-  height:84px;
-  object-fit:contain;
-  flex:0 0 auto;
-}
-
-.spotlight-name{
-  font-size:20px;
-  font-weight:900;
-  margin-bottom:4px;
-}
-
-.spotlight-num{
-  color:var(--muted);
-  font-weight:800;
-  margin-bottom:8px;
-  font-size:13px;
-}
-
-.badge-list{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
-
-.achievement{
-  background:#f8fafc;
-  border-radius:14px;
-  padding:10px 12px;
-  font-weight:800;
-  font-size:13px;
 }
 
 .activity-list{
@@ -475,10 +416,6 @@ select{
   display:grid;
   grid-template-columns:repeat(5,1fr);
   gap:10px;
-}
-
-.grid.compact{
-  grid-template-columns:repeat(6,1fr);
 }
 
 .card{
@@ -522,16 +459,6 @@ select{
   display:block;
   margin:0 auto 4px;
   pointer-events:none;
-}
-
-.compact .card{
-  min-height:136px;
-  padding:9px 7px 7px;
-}
-
-.compact .card img{
-  width:58px;
-  height:58px;
 }
 
 .number{
@@ -650,18 +577,141 @@ select{
   display:none;
 }
 
+.search-results-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.search-result{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px;
+  border-radius:16px;
+  background:#f8fafc;
+  box-shadow:var(--shadow-soft);
+  cursor:pointer;
+}
+
+.search-result img{
+  width:56px;
+  height:56px;
+  object-fit:contain;
+  flex:0 0 auto;
+}
+
+.search-result-main{
+  flex:1;
+  min-width:0;
+}
+
+.search-result-title{
+  font-size:16px;
+  font-weight:900;
+  margin-bottom:3px;
+}
+
+.search-result-meta{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800;
+  line-height:1.4;
+}
+
+.search-result-state{
+  font-size:11px;
+  font-weight:900;
+  color:var(--muted);
+  margin-top:5px;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+}
+
+.achievements-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.achievement-card{
+  border-radius:18px;
+  padding:14px;
+  background:#f8fafc;
+  box-shadow:var(--shadow-soft);
+  border:2px solid transparent;
+}
+
+.achievement-card.complete{
+  background:linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+  border-color:#bfdbfe;
+}
+
+.achievement-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:8px;
+}
+
+.achievement-title{
+  font-size:16px;
+  font-weight:900;
+  margin-bottom:4px;
+}
+
+.achievement-desc{
+  font-size:13px;
+  color:var(--muted);
+  font-weight:700;
+}
+
+.achievement-status{
+  flex:0 0 auto;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.4px;
+  text-transform:uppercase;
+  padding:7px 10px;
+  border-radius:999px;
+  background:#fff7cc;
+  color:#8a6400;
+}
+
+.achievement-card.complete .achievement-status{
+  background:#dbeafe;
+  color:#1d4ed8;
+}
+
+.achievement-meta{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:8px;
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800;
+}
+
+.bottom-link-wrap{
+  text-align:center;
+  margin-top:6px;
+}
+
+.bottom-link-wrap button{
+  background:#f8fafc;
+}
+
 @media (max-width: 900px){
   .home-grid{grid-template-columns:repeat(2,1fr)}
   .two-col{grid-template-columns:1fr}
   .grid{grid-template-columns:repeat(4,1fr)}
-  .grid.compact{grid-template-columns:repeat(5,1fr)}
 }
 
 @media (max-width: 640px){
   .stats-grid{grid-template-columns:repeat(2,1fr)}
-  .controls-grid{grid-template-columns:1fr}
   .grid{grid-template-columns:repeat(3,1fr)}
-  .grid.compact{grid-template-columns:repeat(4,1fr)}
   .logo-row img{height:46px}
   .hero-title{font-size:24px}
 }
@@ -669,7 +719,6 @@ select{
 @media (max-width: 390px){
   .home-grid{grid-template-columns:repeat(2,1fr)}
   .grid{grid-template-columns:repeat(3,1fr)}
-  .grid.compact{grid-template-columns:repeat(3,1fr)}
   .card{min-height:146px}
   .card img{width:62px;height:62px}
 }
@@ -689,6 +738,7 @@ select{
 <div class="shell">
   <div id="home"></div>
   <div id="app" class="hidden"></div>
+  <div id="achievements-page" class="hidden"></div>
   <div class="footer-space"></div>
 </div>
 
@@ -713,22 +763,38 @@ let owned = JSON.parse(localStorage.getItem("owned") || "{}");
 let favourites = JSON.parse(localStorage.getItem("favourites") || "{}");
 let activityLog = JSON.parse(localStorage.getItem("activityLog") || "[]");
 let settings = JSON.parse(localStorage.getItem("settings") || JSON.stringify({
-  cardSize:"comfy",
-  sort:"number",
   homeSearch:"",
   genSearch:"",
-  statusFilter:"all"
+  statusFilter:"all",
+  homeSearchSubmitted:false
 }));
+
+if(typeof settings.homeSearchSubmitted !== "boolean"){
+  settings.homeSearchSubmitted = false;
+}
 
 const namesCache = {};
 let loaded = false;
 let currentGenId = null;
+let currentPage = "home";
 
 function saveAll(){
   localStorage.setItem("owned", JSON.stringify(owned));
   localStorage.setItem("favourites", JSON.stringify(favourites));
   localStorage.setItem("activityLog", JSON.stringify(activityLog.slice(0, 40)));
   localStorage.setItem("settings", JSON.stringify(settings));
+}
+
+function scrollToTopInstant(){
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+}
+
+function scrollToTopAfterRender(){
+  scrollToTopInstant();
+  requestAnimationFrame(scrollToTopInstant);
+  setTimeout(scrollToTopInstant, 20);
 }
 
 function cap(str){
@@ -774,12 +840,6 @@ function getStateClass(state){
   return state === 2 ? "owned" : state === 1 ? "ordered" : "";
 }
 
-function getStateWeight(state){
-  if(state === 2) return 2;
-  if(state === 1) return 1;
-  return 0;
-}
-
 function formatTime(ts){
   const d = new Date(ts);
   return d.toLocaleDateString() + " " + d.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
@@ -817,10 +877,14 @@ function getGenCounts(gen){
   return getCounts(gen.start, gen.end);
 }
 
-function progressBar(percent){
+function getGenForPokemon(id){
+  return gens.find(g => id >= g.start && id <= g.end) || null;
+}
+
+function progressBar(percent, complete = false){
   return `
     <div class="progress">
-      <div class="progress-fill" style="width:${percent}%"></div>
+      <div class="progress-fill ${complete ? 'complete' : ''}" style="width:${percent}%"></div>
     </div>
   `;
 }
@@ -829,9 +893,14 @@ function renderRegionBadge(gen){
   return `<div class="region-badge" style="background:${gen.color}">${gen.badge}</div>`;
 }
 
-function searchPokemonIds(query, start = 1, end = TOTAL_POKEMON){
+function searchPokemonIds(query, start = 1, end = TOTAL_POKEMON, showAllWhenBlank = true){
   const q = query.trim().toLowerCase();
-  if(!q) return Array.from({length:end-start+1}, (_,i)=>start+i);
+
+  if(!q){
+    return showAllWhenBlank
+      ? Array.from({length:end-start+1}, (_,i)=>start+i)
+      : [];
+  }
 
   const isNumber = /^\d+$/.test(q);
   const results = [];
@@ -847,6 +916,7 @@ function searchPokemonIds(query, start = 1, end = TOTAL_POKEMON){
     if(name === q) results.unshift(i);
     else if(name.includes(q)) results.push(i);
   }
+
   return results;
 }
 
@@ -860,39 +930,10 @@ function applyStatusFilter(ids){
   return ids;
 }
 
-function sortPokemonIds(ids){
-  const sort = settings.sort;
-
-  return ids.slice().sort((a,b) => {
-    if(sort === "number") return a - b;
-
-    if(sort === "name"){
-      return getPokemonName(a).localeCompare(getPokemonName(b)) || a - b;
-    }
-
-    if(sort === "status"){
-      const diff = getStateWeight(owned[b] || 0) - getStateWeight(owned[a] || 0);
-      if(diff !== 0) return diff;
-      return a - b;
-    }
-
-    if(sort === "favourites"){
-      const favDiff = (favourites[b] ? 1 : 0) - (favourites[a] ? 1 : 0);
-      if(favDiff !== 0) return favDiff;
-      const stateDiff = getStateWeight(owned[b] || 0) - getStateWeight(owned[a] || 0);
-      if(stateDiff !== 0) return stateDiff;
-      return a - b;
-    }
-
-    return a - b;
-  });
-}
-
-function getFilteredIds(start = 1, end = TOTAL_POKEMON, query = ""){
-  let ids = searchPokemonIds(query, start, end);
+function getFilteredIds(start = 1, end = TOTAL_POKEMON, query = "", showAllWhenBlank = true){
+  let ids = searchPokemonIds(query, start, end, showAllWhenBlank);
   ids = applyStatusFilter(ids);
-  ids = sortPokemonIds(ids);
-  return ids;
+  return ids.sort((a,b) => a - b);
 }
 
 function renderPokemonCard(id){
@@ -918,48 +959,115 @@ function renderPokemonCard(id){
   `;
 }
 
-function getRandomMissingId(){
-  const missing = [];
-  for(let i=1;i<=TOTAL_POKEMON;i++){
-    if((owned[i] || 0) === 0) missing.push(i);
+function getAchievementData(){
+  const overall = getCounts();
+  const completedGens = gens.filter(g => getGenCounts(g).ownedCount === getGenCounts(g).total).length;
+
+  const defs = [
+    { key:"starter", title:"Starter Trainer", desc:"Own at least 1 Pokémon.", current:overall.ownedCount, target:1, unit:"owned" },
+    { key:"route", title:"Route Explorer", desc:"Own 25 Pokémon.", current:overall.ownedCount, target:25, unit:"owned" },
+    { key:"gym", title:"Gym Challenger", desc:"Own 100 Pokémon.", current:overall.ownedCount, target:100, unit:"owned" },
+    { key:"johto", title:"Johto Conqueror", desc:"Own 251 Pokémon.", current:overall.ownedCount, target:251, unit:"owned" },
+    { key:"regional", title:"Regional Master", desc:"Own 500 Pokémon.", current:overall.ownedCount, target:500, unit:"owned" },
+    { key:"elite", title:"Elite Collector", desc:"Own 750 Pokémon.", current:overall.ownedCount, target:750, unit:"owned" },
+    { key:"livingdex", title:"Living Dex Hunter", desc:"Own 900 Pokémon.", current:overall.ownedCount, target:900, unit:"owned" },
+    { key:"completeall", title:"Catch 'Em All!", desc:"Own all 1025 Pokémon.", current:overall.ownedCount, target:TOTAL_POKEMON, unit:"owned" },
+    { key:"gencomplete", title:"Generation Complete", desc:"Fully complete 1 generation.", current:completedGens, target:1, unit:"generations" },
+    { key:"multiregion", title:"Multi-Region Legend", desc:"Fully complete 3 generations.", current:completedGens, target:3, unit:"generations" },
+    { key:"allregions", title:"All Regions Cleared", desc:"Fully complete all 9 generations.", current:completedGens, target:gens.length, unit:"generations" },
+    { key:"favourites", title:"Fan Favourites", desc:"Mark 10 Pokémon as favourites.", current:overall.favouriteCount, target:10, unit:"favourites" },
+    { key:"ordered", title:"Incoming Mail Day", desc:"Have 10 Pokémon marked as ordered.", current:overall.orderedCount, target:10, unit:"ordered" }
+  ];
+
+  const items = defs.map(item => {
+    const rawPct = Math.round((Math.min(item.current, item.target) / item.target) * 100);
+    const complete = item.current >= item.target;
+    return {...item, pct:rawPct, complete};
+  });
+
+  items.sort((a,b) => {
+    if(a.complete !== b.complete) return a.complete ? 1 : -1;
+    if(a.pct !== b.pct) return b.pct - a.pct;
+    return a.title.localeCompare(b.title);
+  });
+
+  return items;
+}
+
+function renderAchievementList(){
+  const items = getAchievementData();
+
+  return `
+    <div class="achievements-list">
+      ${items.map(item => `
+        <div class="achievement-card ${item.complete ? 'complete' : ''}">
+          <div class="achievement-top">
+            <div>
+              <div class="achievement-title">${item.title}</div>
+              <div class="achievement-desc">${item.desc}</div>
+            </div>
+            <div class="achievement-status">${item.complete ? "Complete" : "In progress"}</div>
+          </div>
+          ${progressBar(item.pct, item.complete)}
+          <div class="achievement-meta">
+            <span>${item.current}/${item.target} ${item.unit}</span>
+            <span>${item.pct}% complete</span>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderHomeSearchResults(ids){
+  if(!settings.homeSearchSubmitted){
+    return `<div class="empty">Search by name or number to quickly find a Pokémon and see which generation it belongs to.</div>`;
   }
-  if(!missing.length) return null;
-  return missing[Math.floor(Math.random() * missing.length)];
+
+  if(!settings.homeSearch.trim()){
+    return `<div class="empty">Enter a Pokémon name or number, then press Search.</div>`;
+  }
+
+  if(!ids.length){
+    return `<div class="empty">No Pokémon match this search.</div>`;
+  }
+
+  return `
+    <div class="search-results-list">
+      ${ids.map(id => {
+        const gen = getGenForPokemon(id);
+        const state = owned[id] || 0;
+        return `
+          <div class="search-result" onclick="jumpToPokemon(${id})">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png" alt="${getPokemonName(id)}">
+            <div class="search-result-main">
+              <div class="search-result-title">#${id} ${getPokemonName(id)}</div>
+              <div class="search-result-meta">Gen ${gen.id} • ${gen.region}</div>
+              <div class="search-result-state">${getStateLabel(state)}</div>
+            </div>
+            <button class="small" onclick="event.stopPropagation(); jumpToPokemon(${id})">Open</button>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
 }
 
-function getAchievements(counts){
-  const achievements = [];
-
-  if(counts.ownedCount >= 1) achievements.push("Starter Trainer");
-  if(counts.ownedCount >= 25) achievements.push("Route Explorer");
-  if(counts.ownedCount >= 100) achievements.push("Gym Challenger");
-  if(counts.ownedCount >= 251) achievements.push("Johto Conqueror");
-  if(counts.ownedCount >= 500) achievements.push("Regional Master");
-  if(counts.ownedCount >= 750) achievements.push("Elite Collector");
-  if(counts.ownedCount >= 900) achievements.push("Living Dex Hunter");
-  if(counts.ownedCount === TOTAL_POKEMON) achievements.push("Catch 'Em All!");
-
-  const fullyComplete = gens.filter(g => getGenCounts(g).ownedCount === getGenCounts(g).total).length;
-  if(fullyComplete >= 1) achievements.push("Generation Complete");
-  if(fullyComplete >= 3) achievements.push("Multi-Region Legend");
-  if(fullyComplete === gens.length) achievements.push("All Regions Cleared");
-
-  if(counts.favouriteCount >= 10) achievements.push("Fan Favourites");
-  if(counts.orderedCount >= 10) achievements.push("Incoming Mail Day");
-
-  return achievements;
-}
-
-function renderHome(){
+function renderHome(shouldScroll = true){
+  currentPage = "home";
   currentGenId = null;
+
   document.getElementById("app").classList.add("hidden");
+  document.getElementById("achievements-page").classList.add("hidden");
+
   const home = document.getElementById("home");
   home.classList.remove("hidden");
 
   const counts = getCounts();
-  const achievements = getAchievements(counts);
-  const randomMissingId = getRandomMissingId();
   const recent = activityLog.slice(0, 6);
+  const homeSearchResults = settings.homeSearchSubmitted
+    ? getFilteredIds(1, TOTAL_POKEMON, settings.homeSearch, false)
+    : [];
 
   let html = `
     <div class="section hero">
@@ -969,7 +1077,7 @@ function renderHome(){
       </div>
 
       <div class="hero-title">Build your living Pokédex</div>
-      <div class="hero-sub">Track every Pokémon from #1 to #1025, mark orders, favourites, and chase what you still need.</div>
+      <div class="hero-sub">Track every Pokémon from #1 to #1025, mark orders, favourites, and keep your collection moving.</div>
 
       <div class="stats-grid">
         <div class="stat-card">
@@ -996,7 +1104,7 @@ function renderHome(){
     <div class="section">
       <div class="panel-title">
         <h3>Search the full Pokédex</h3>
-        <div class="panel-note">By name or number</div>
+        <div class="panel-note">Name or number</div>
       </div>
 
       <div class="search-panel">
@@ -1008,69 +1116,21 @@ function renderHome(){
             placeholder="Search all Pokémon..."
             value="${escapeHtml(settings.homeSearch)}"
             oninput="updateHomeSearch(this.value)"
+            onkeydown="handleHomeSearchKey(event)"
             autocomplete="off"
             autocapitalize="none"
             spellcheck="false"
           >
+          <button class="primary" onclick="submitHomeSearch()">Search</button>
           <button onclick="clearHomeSearch()">Clear</button>
         </div>
 
-        <div class="filter-row">
-          ${renderFilterChips()}
-        </div>
+        <div class="helper">Search a Pokémon to see its generation, region, and current collection status.</div>
 
-        <div class="controls-grid">
-          <select onchange="updateSort(this.value)">
-            <option value="number" ${settings.sort==="number"?"selected":""}>Sort: Number</option>
-            <option value="name" ${settings.sort==="name"?"selected":""}>Sort: Name</option>
-            <option value="status" ${settings.sort==="status"?"selected":""}>Sort: Status</option>
-            <option value="favourites" ${settings.sort==="favourites"?"selected":""}>Sort: Favourites</option>
-          </select>
-
-          <select onchange="updateCardSize(this.value)">
-            <option value="comfy" ${settings.cardSize==="comfy"?"selected":""}>View: Comfy</option>
-            <option value="compact" ${settings.cardSize==="compact"?"selected":""}>View: Compact</option>
-          </select>
-
-          <button class="ghost" onclick="shuffleSpotlight()">New random chase</button>
-        </div>
-
-        <div class="helper">Tap a card to cycle Missing → Ordered → Owned. Tap the star to favourite.</div>
+        ${renderHomeSearchResults(homeSearchResults)}
       </div>
     </div>
-  `;
 
-  if(randomMissingId){
-    html += `
-      <div class="two-col">
-        <div class="section spotlight">
-          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${randomMissingId}.png" alt="${getPokemonName(randomMissingId)}">
-          <div>
-            <div class="panel-note">Random missing spotlight</div>
-            <div class="spotlight-name">${getPokemonName(randomMissingId)}</div>
-            <div class="spotlight-num">#${randomMissingId}</div>
-            <button class="primary small" onclick="jumpToPokemon(${randomMissingId})">Find it in the Pokédex</button>
-          </div>
-        </div>
-
-        <div class="side-stack">
-          <div class="section">
-            <div class="panel-title">
-              <h3>Achievements</h3>
-              <div class="panel-note">${achievements.length} unlocked</div>
-            </div>
-            <div class="badge-list">
-              ${achievements.length
-                ? achievements.map(a => `<div class="achievement">${a}</div>`).join("")
-                : `<div class="empty">No badges yet.</div>`}
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  html += `
     <div class="section">
       <div class="panel-title">
         <h3>Generations</h3>
@@ -1083,7 +1143,7 @@ function renderHome(){
   gens.forEach(g => {
     const stats = getGenCounts(g);
     html += `
-      <div class="gen-card" onclick="openGen(${g.id})">
+      <div class="gen-card" onclick="openGen(${g.id}, true)">
         ${renderRegionBadge(g)}
         <div class="gen-title">Gen ${g.id}</div>
         <div class="gen-subtitle">${g.region}</div>
@@ -1101,46 +1161,41 @@ function renderHome(){
     <div class="two-col">
       <div class="section">
         <div class="panel-title">
-          <h3>Search results</h3>
-          <div class="panel-note">${getFilteredIds(1, TOTAL_POKEMON, settings.homeSearch).length} shown</div>
+          <h3>Recent activity</h3>
+          <div class="panel-note">Latest changes</div>
         </div>
-        ${renderPokemonGrid(getFilteredIds(1, TOTAL_POKEMON, settings.homeSearch))}
-      </div>
-
-      <div class="side-stack">
-        <div class="section">
-          <div class="panel-title">
-            <h3>Recent activity</h3>
-            <div class="panel-note">Latest changes</div>
-          </div>
-          <div class="activity-list">
-            ${recent.length
-              ? recent.map(item => `<div class="activity-item">${escapeHtml(item.text)}<br><span class="muted">${formatTime(item.ts)}</span></div>`).join("")
-              : `<div class="empty">No activity yet.</div>`}
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="panel-title">
-            <h3>Backup & tools</h3>
-            <div class="panel-note">Keep your data safe</div>
-          </div>
-
-          <div class="quick-actions">
-            <button class="small" onclick="exportData()">Export backup</button>
-            <button class="small" onclick="document.getElementById('import-file').click()">Import backup</button>
-            <button class="small danger" onclick="resetAll()">Clear all progress</button>
-          </div>
-
-          <div class="note-box" style="margin-top:10px;">
-            Your collection is stored in this browser. Export a backup before switching device or clearing browser data.
-          </div>
+        <div class="activity-list">
+          ${recent.length
+            ? recent.map(item => `<div class="activity-item">${escapeHtml(item.text)}<br><span class="muted">${formatTime(item.ts)}</span></div>`).join("")
+            : `<div class="empty">No activity yet.</div>`}
         </div>
       </div>
+
+      <div class="section">
+        <div class="panel-title">
+          <h3>Backup & tools</h3>
+          <div class="panel-note">Keep your data safe</div>
+        </div>
+
+        <div class="quick-actions">
+          <button class="small" onclick="exportData()">Export backup</button>
+          <button class="small" onclick="document.getElementById('import-file').click()">Import backup</button>
+          <button class="small danger" onclick="resetAll()">Clear all progress</button>
+        </div>
+
+        <div class="note-box" style="margin-top:10px;">
+          Your collection is stored in this browser. Export a backup before switching device or clearing browser data.
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-link-wrap">
+      <button onclick="openAchievements(true)">View achievements</button>
     </div>
   `;
 
   home.innerHTML = html;
+  if(shouldScroll) scrollToTopAfterRender();
 }
 
 function renderGenSummary(gen){
@@ -1193,24 +1248,28 @@ function renderPokemonGrid(ids){
   }
 
   return `
-    <div class="grid ${settings.cardSize === 'compact' ? 'compact' : ''}">
+    <div class="grid">
       ${ids.map(id => renderPokemonCard(id)).join("")}
     </div>
   `;
 }
 
-function openGen(id){
+function openGen(id, shouldScroll = true){
+  currentPage = "gen";
   currentGenId = id;
+
   document.getElementById("home").classList.add("hidden");
+  document.getElementById("achievements-page").classList.add("hidden");
+
   const app = document.getElementById("app");
   app.classList.remove("hidden");
 
   const gen = getGenById(id);
-  const ids = getFilteredIds(gen.start, gen.end, settings.genSearch);
+  const ids = getFilteredIds(gen.start, gen.end, settings.genSearch, true);
 
   let html = `
     <div class="topbar">
-      <button onclick="renderHome()">← Home</button>
+      <button onclick="renderHome(true)">← Home</button>
       <div class="topbar-center">${gen.region} • Gen ${gen.id}</div>
       <button class="primary" onclick="saveAll(); alert('Saved!')">Save</button>
     </div>
@@ -1243,22 +1302,6 @@ function openGen(id){
           ${renderFilterChips()}
         </div>
 
-        <div class="controls-grid">
-          <select onchange="updateSort(this.value)">
-            <option value="number" ${settings.sort==="number"?"selected":""}>Sort: Number</option>
-            <option value="name" ${settings.sort==="name"?"selected":""}>Sort: Name</option>
-            <option value="status" ${settings.sort==="status"?"selected":""}>Sort: Status</option>
-            <option value="favourites" ${settings.sort==="favourites"?"selected":""}>Sort: Favourites</option>
-          </select>
-
-          <select onchange="updateCardSize(this.value)">
-            <option value="comfy" ${settings.cardSize==="comfy"?"selected":""}>View: Comfy</option>
-            <option value="compact" ${settings.cardSize==="compact"?"selected":""}>View: Compact</option>
-          </select>
-
-          <button class="ghost" onclick="markGenOwned(${gen.id})">Complete gen</button>
-        </div>
-
         <div class="quick-actions">
           <button class="small" onclick="markGenState(${gen.id}, 0)">Mark all missing</button>
           <button class="small" onclick="markGenState(${gen.id}, 1)">Mark all ordered</button>
@@ -1274,6 +1317,43 @@ function openGen(id){
   `;
 
   app.innerHTML = html;
+  if(shouldScroll) scrollToTopAfterRender();
+}
+
+function openAchievements(shouldScroll = true){
+  currentPage = "achievements";
+  currentGenId = null;
+
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("app").classList.add("hidden");
+
+  const page = document.getElementById("achievements-page");
+  page.classList.remove("hidden");
+
+  const data = getAchievementData();
+  const completeCount = data.filter(a => a.complete).length;
+
+  page.innerHTML = `
+    <div class="topbar">
+      <button onclick="renderHome(true)">← Home</button>
+      <div class="topbar-center">Achievements</div>
+      <div style="width:74px;"></div>
+    </div>
+
+    <div class="section">
+      <div class="panel-title">
+        <h3>Achievement progress</h3>
+        <div class="panel-note">${completeCount}/${data.length} complete</div>
+      </div>
+      <div class="helper">In progress achievements are shown first by highest completion percentage. Completed ones are moved to the bottom.</div>
+    </div>
+
+    <div class="section">
+      ${renderAchievementList()}
+    </div>
+  `;
+
+  if(shouldScroll) scrollToTopAfterRender();
 }
 
 function toggleState(id){
@@ -1285,7 +1365,7 @@ function toggleState(id){
   const name = getPokemonName(id);
   addActivity(`${name} (#${id}) set to ${getStateLabel(next)}`);
 
-  rerender();
+  rerender(false);
 }
 
 function toggleFavourite(event, id){
@@ -1297,27 +1377,43 @@ function toggleFavourite(event, id){
   const name = getPokemonName(id);
   addActivity(`${name} (#${id}) ${favourites[id] ? 'added to favourites' : 'removed from favourites'}`);
 
-  rerender();
+  rerender(false);
 }
 
 function updateHomeSearch(value){
   settings.homeSearch = value;
+  settings.homeSearchSubmitted = false;
   saveAll();
-  renderHome();
+}
+
+function submitHomeSearch(){
+  settings.homeSearchSubmitted = true;
+  saveAll();
+  renderHome(false);
+
   const el = document.getElementById("home-search");
   if(el) el.focus();
 }
 
+function handleHomeSearchKey(event){
+  if(event.key === "Enter"){
+    event.preventDefault();
+    submitHomeSearch();
+  }
+}
+
 function clearHomeSearch(){
   settings.homeSearch = "";
+  settings.homeSearchSubmitted = false;
   saveAll();
-  renderHome();
+  renderHome(false);
 }
 
 function updateGenSearch(value){
   settings.genSearch = value;
   saveAll();
-  if(currentGenId) openGen(currentGenId);
+  if(currentGenId) openGen(currentGenId, false);
+
   setTimeout(() => {
     const el = document.getElementById("gen-search");
     if(el){
@@ -1331,34 +1427,25 @@ function updateGenSearch(value){
 function clearGenSearch(){
   settings.genSearch = "";
   saveAll();
-  if(currentGenId) openGen(currentGenId);
+  if(currentGenId) openGen(currentGenId, false);
 }
 
 function updateStatusFilter(value){
   settings.statusFilter = value;
   saveAll();
-  rerender();
+  rerender(false);
 }
 
-function updateSort(value){
-  settings.sort = value;
-  saveAll();
-  rerender();
-}
-
-function updateCardSize(value){
-  settings.cardSize = value;
-  saveAll();
-  rerender();
-}
-
-function rerender(){
-  if(currentGenId) openGen(currentGenId);
-  else renderHome();
-}
-
-function shuffleSpotlight(){
-  renderHome();
+function rerender(shouldScroll = false){
+  if(currentPage === "gen" && currentGenId){
+    openGen(currentGenId, shouldScroll);
+    return;
+  }
+  if(currentPage === "achievements"){
+    openAchievements(shouldScroll);
+    return;
+  }
+  renderHome(shouldScroll);
 }
 
 function jumpToPokemon(id){
@@ -1366,7 +1453,7 @@ function jumpToPokemon(id){
   if(!gen) return;
   settings.genSearch = String(id);
   saveAll();
-  openGen(gen.id);
+  openGen(gen.id, true);
 }
 
 function markGenState(genId, state){
@@ -1378,11 +1465,7 @@ function markGenState(genId, state){
   }
   saveAll();
   addActivity(`${gen.region} marked as ${getStateLabel(state)}`);
-  openGen(genId);
-}
-
-function markGenOwned(genId){
-  markGenState(genId, 2);
+  openGen(genId, false);
 }
 
 function clearGenFavourites(genId){
@@ -1392,7 +1475,7 @@ function clearGenFavourites(genId){
   }
   saveAll();
   addActivity(`Cleared favourites in ${gen.region}`);
-  openGen(genId);
+  openGen(genId, false);
 }
 
 function exportData(){
@@ -1416,7 +1499,7 @@ function exportData(){
   URL.revokeObjectURL(url);
 
   addActivity("Exported collection backup");
-  rerender();
+  rerender(false);
 }
 
 function importDataFromFile(file){
@@ -1430,17 +1513,16 @@ function importDataFromFile(file){
       if(Array.isArray(data.activityLog)) activityLog = data.activityLog;
       if(data.settings && typeof data.settings === "object"){
         settings = {
-          cardSize:data.settings.cardSize || "comfy",
-          sort:data.settings.sort || "number",
           homeSearch:"",
           genSearch:"",
-          statusFilter:data.settings.statusFilter || "all"
+          statusFilter:data.settings.statusFilter || "all",
+          homeSearchSubmitted:false
         };
       }
 
       saveAll();
       addActivity("Imported collection backup");
-      rerender();
+      rerender(false);
       alert("Import complete!");
     }catch(err){
       alert("That backup file could not be read.");
@@ -1457,14 +1539,13 @@ function resetAll(){
   favourites = {};
   activityLog = [];
   settings = {
-    cardSize:"comfy",
-    sort:"number",
     homeSearch:"",
     genSearch:"",
-    statusFilter:"all"
+    statusFilter:"all",
+    homeSearchSubmitted:false
   };
   saveAll();
-  renderHome();
+  renderHome(false);
 }
 
 function escapeHtml(str){
@@ -1483,7 +1564,7 @@ document.getElementById("import-file").addEventListener("change", function(e){
 
 async function init(){
   await loadNames();
-  renderHome();
+  renderHome(false);
 }
 
 init();
